@@ -32,6 +32,11 @@
 		8B46A74123DF518E00D8A847 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B46A74023DF518E00D8A847 /* EditProfileViewController.swift */; };
 		8BD72A9F23E5E64D005404E2 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD72A9E23E5E64D005404E2 /* Menu.swift */; };
 		8BD72AA123E5FB89005404E2 /* MenuCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD72AA023E5FB89005404E2 /* MenuCollectionViewCell.swift */; };
+		8BD72AE123E7112A005404E2 /* ListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD72AE023E7112A005404E2 /* ListCollectionViewCell.swift */; };
+		8BD72AE323E71FED005404E2 /* SelectedListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD72AE223E71FED005404E2 /* SelectedListViewController.swift */; };
+		8BD72AE623E727B7005404E2 /* AlertStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BD72AE523E727B7005404E2 /* AlertStoryboard.storyboard */; };
+		8BD72AE823E7280B005404E2 /* AddListAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD72AE723E7280B005404E2 /* AddListAlertViewController.swift */; };
+		8BD72AEB23E72E8D005404E2 /* AlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD72AEA23E72E8D005404E2 /* AlertService.swift */; };
 		9A45F29949F9E68CB89295DA /* Pods_EasyChef_EasyChefUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BE3DA11E2C14B7CE1575711 /* Pods_EasyChef_EasyChefUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -86,6 +91,11 @@
 		8B46A74023DF518E00D8A847 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		8BD72A9E23E5E64D005404E2 /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
 		8BD72AA023E5FB89005404E2 /* MenuCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCollectionViewCell.swift; sourceTree = "<group>"; };
+		8BD72AE023E7112A005404E2 /* ListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCollectionViewCell.swift; sourceTree = "<group>"; };
+		8BD72AE223E71FED005404E2 /* SelectedListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedListViewController.swift; sourceTree = "<group>"; };
+		8BD72AE523E727B7005404E2 /* AlertStoryboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AlertStoryboard.storyboard; sourceTree = "<group>"; };
+		8BD72AE723E7280B005404E2 /* AddListAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddListAlertViewController.swift; sourceTree = "<group>"; };
+		8BD72AEA23E72E8D005404E2 /* AlertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertService.swift; sourceTree = "<group>"; };
 		B5F19618E9320E987D762873 /* Pods_EasyChef.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EasyChef.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D97B4D63AB052514C3BCE1DA /* Pods-EasyChef.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyChef.debug.xcconfig"; path = "Target Support Files/Pods-EasyChef/Pods-EasyChef.debug.xcconfig"; sourceTree = "<group>"; };
 		FB5F9415D864291A7A94EB8E /* Pods-EasyChefTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyChefTests.release.xcconfig"; path = "Target Support Files/Pods-EasyChefTests/Pods-EasyChefTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -159,16 +169,13 @@
 		8B296E5423D9870500C9C045 /* EasyChef */ = {
 			isa = PBXGroup;
 			children = (
+				8BD72AE423E72772005404E2 /* Storyboard */,
 				8B296E8623D9C1DF00C9C045 /* Controller */,
 				8B296E8523D9C1CD00C9C045 /* Model */,
 				8B46A74423E1F40800D8A847 /* Other */,
 				8B296E5723D9870500C9C045 /* SceneDelegate.swift */,
 				8B296E5523D9870500C9C045 /* AppDelegate.swift */,
-				8B46A73C23DF279E00D8A847 /* Extension.swift */,
-				8B46A73E23DF366700D8A847 /* FirestoreReferenceManager.swift */,
-				8B296E5B23D9870500C9C045 /* Main.storyboard */,
 				8B296E5E23D9870600C9C045 /* Assets.xcassets */,
-				8B296E6023D9870600C9C045 /* LaunchScreen.storyboard */,
 				8B296E6323D9870600C9C045 /* Info.plist */,
 				8B296EA523DDA34300C9C045 /* GoogleService-Info.plist */,
 			);
@@ -205,6 +212,7 @@
 		8B296E8623D9C1DF00C9C045 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				8BD72AE923E72E1F005404E2 /* CustomAlert */,
 				8B296E9D23DAACB900C9C045 /* Profile */,
 				8B296E9C23DAACA500C9C045 /* Menu */,
 				8B296E9B23DAAC9B00C9C045 /* List */,
@@ -236,6 +244,7 @@
 			isa = PBXGroup;
 			children = (
 				8B296E8B23D9C23800C9C045 /* ListViewController.swift */,
+				8BD72AE223E71FED005404E2 /* SelectedListViewController.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -261,8 +270,30 @@
 			isa = PBXGroup;
 			children = (
 				8BD72AA023E5FB89005404E2 /* MenuCollectionViewCell.swift */,
+				8BD72AE023E7112A005404E2 /* ListCollectionViewCell.swift */,
+				8B46A73C23DF279E00D8A847 /* Extension.swift */,
+				8B46A73E23DF366700D8A847 /* FirestoreReferenceManager.swift */,
+				8BD72AEA23E72E8D005404E2 /* AlertService.swift */,
 			);
 			path = Other;
+			sourceTree = "<group>";
+		};
+		8BD72AE423E72772005404E2 /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				8B296E6023D9870600C9C045 /* LaunchScreen.storyboard */,
+				8B296E5B23D9870500C9C045 /* Main.storyboard */,
+				8BD72AE523E727B7005404E2 /* AlertStoryboard.storyboard */,
+			);
+			path = Storyboard;
+			sourceTree = "<group>";
+		};
+		8BD72AE923E72E1F005404E2 /* CustomAlert */ = {
+			isa = PBXGroup;
+			children = (
+				8BD72AE723E7280B005404E2 /* AddListAlertViewController.swift */,
+			);
+			path = CustomAlert;
 			sourceTree = "<group>";
 		};
 		B029F338246B2F9CF22DEB46 /* Frameworks */ = {
@@ -395,6 +426,7 @@
 				8B296EA623DDA34300C9C045 /* GoogleService-Info.plist in Resources */,
 				8B296E5F23D9870600C9C045 /* Assets.xcassets in Resources */,
 				8B296E5D23D9870500C9C045 /* Main.storyboard in Resources */,
+				8BD72AE623E727B7005404E2 /* AlertStoryboard.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -527,15 +559,19 @@
 				8BD72A9F23E5E64D005404E2 /* Menu.swift in Sources */,
 				8B296E8E23D9C24A00C9C045 /* ProfileViewController.swift in Sources */,
 				8B296E5623D9870500C9C045 /* AppDelegate.swift in Sources */,
+				8BD72AE323E71FED005404E2 /* SelectedListViewController.swift in Sources */,
 				8B46A73F23DF366700D8A847 /* FirestoreReferenceManager.swift in Sources */,
 				8B296E5823D9870500C9C045 /* SceneDelegate.swift in Sources */,
 				8B46A73D23DF279E00D8A847 /* Extension.swift in Sources */,
 				8B296E8823D9C20B00C9C045 /* HomeViewController.swift in Sources */,
 				8B296E9323DA066F00C9C045 /* LoginViewController.swift in Sources */,
+				8BD72AE123E7112A005404E2 /* ListCollectionViewCell.swift in Sources */,
+				8BD72AEB23E72E8D005404E2 /* AlertService.swift in Sources */,
 				8B296E8C23D9C23800C9C045 /* ListViewController.swift in Sources */,
 				8B296E9923DAA98300C9C045 /* User.swift in Sources */,
 				8B296E8A23D9C22800C9C045 /* OwnedMenuViewController.swift in Sources */,
 				8B296E9023D9C5CB00C9C045 /* WelcomeViewController.swift in Sources */,
+				8BD72AE823E7280B005404E2 /* AddListAlertViewController.swift in Sources */,
 				8BD72AA123E5FB89005404E2 /* MenuCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import Kingfisher
+import Photos
 
 class EditProfileViewController: UIViewController {
 
@@ -26,6 +27,7 @@ class EditProfileViewController: UIViewController {
         showUserProfile()
         configureRoundProfileImage(imageView: profileImageView)
         self.title = "Edit"
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -124,12 +126,10 @@ extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigati
     
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
-        if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+        let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
             profileImageView.image = editedImage
-        } else if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            profileImageView.image = originalImage
-        }
         
-        dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
+
 }

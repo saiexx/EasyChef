@@ -13,17 +13,12 @@ class OwnedMenuViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        addNavBarImage(viewController: self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         if !checkLoginStatatus() {
             self.dismiss(animated: true, completion: nil)
         }
-    }
-    
-    func checkLoginStatatus() -> Bool{
-        return Auth.auth().currentUser != nil
     }
 
 }

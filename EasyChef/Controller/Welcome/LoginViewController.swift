@@ -33,7 +33,6 @@ class LoginViewController: UIViewController {
             print("email/password is nil")
             return
         }
-        
         emailLogin(userEmail: userEmail, userPassword: userPassword)
     }
     
@@ -42,7 +41,7 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func registerButtonPressed(_ sender: Any) {
-        goToRegisterScreen()
+        segueWithoutSender(destination: "goToRegisterScreen")
     }
     
     @IBAction func backButtonPressed(_ sender: Any) {
@@ -95,15 +94,7 @@ class LoginViewController: UIViewController {
             }
         }
     }
-    
-    // send true if user is sign in
-    func checkLoginStatatus() -> Bool{
-        return firebaseAuth.currentUser != nil
-    }
-    
-    func goToRegisterScreen() {
-        performSegue(withIdentifier: "goToRegisterScreen", sender: nil)
-    }
+
     
     func createDB(uid:String) {
         

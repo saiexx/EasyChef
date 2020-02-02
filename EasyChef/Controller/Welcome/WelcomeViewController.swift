@@ -22,41 +22,24 @@ class WelcomeViewController: UIViewController {
     
     @IBAction func getStartedButtonPressed(_ sender: Any) {
         print("goToMainScreen")
-        goToMainScreen()
+        segueWithoutSender(destination: "goToMainScreen")
     }
     
     @IBAction func loginButtonPressed(_ sender: Any) {
         print("goToLoginScreen")
-        goToLoginScreen()
+        segueWithoutSender(destination: "goToLoginScreen")
     }
     
     @IBAction func registerButtonPressed(_ sender: Any) {
         print("goToRegisterScreen")
-        goToRegisterScreen()
+        segueWithoutSender(destination: "goToRegisterScreen")
     }
     
     func goToMainScreenIfAuth() {
         if checkLoginStatatus() {
-            goToMainScreen()
+            segueWithoutSender(destination: "goToMainScreen")
             print("Logged")
         }
-    }
-    
-    func checkLoginStatatus() -> Bool{
-        return Auth.auth().currentUser != nil
-    }
-    
-    // segue destination
-    func goToMainScreen() {
-        performSegue(withIdentifier: "goToMainScreen", sender: nil)
-    }
-    
-    func goToLoginScreen() {
-        performSegue(withIdentifier: "goToLoginScreen", sender: nil)
-    }
-    
-    func goToRegisterScreen() {
-        performSegue(withIdentifier: "goToRegisterScreen", sender: nil)
     }
 
 }

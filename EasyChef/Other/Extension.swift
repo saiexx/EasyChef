@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Firebase
 
 extension UIViewController {
     
@@ -33,6 +34,14 @@ extension UIViewController {
     func configureRoundProfileImage(imageView: UIImageView) {
         imageView.layer.cornerRadius = imageView.frame.size.width / 2;
         imageView.clipsToBounds = true
+    }
+    
+    func checkLoginStatatus() -> Bool{
+        return Auth.auth().currentUser != nil
+    }
+    
+    func segueWithoutSender(destination:String) {
+        performSegue(withIdentifier: destination, sender: nil)
     }
 }
 

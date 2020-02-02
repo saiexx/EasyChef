@@ -26,16 +26,17 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         configureRoundProfileImage(imageView: profileImageView)
         showUserProfile()
-        addNavBarImage(viewController: self)
+        
+        self.navigationItem.title = user?.displayName ?? "User"
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if !checkLoginStatatus() {
             self.dismiss(animated: true, completion: nil)
-        } else {
             return
         }
+        self.navigationItem.title = user?.displayName ?? "User"
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -45,7 +46,7 @@ class ProfileViewController: UIViewController {
     
     
     @IBAction func editButtonPressed(_ sender: Any) {
-        performSegue(withIdentifier: "goToEditProfile", sender: nil)
+        segueWithoutSender(destination: "goToEditProfile")
     }
     
     @IBAction func logoutButtonPressed(_ sender: Any) {
@@ -53,10 +54,6 @@ class ProfileViewController: UIViewController {
             facebookLogout()
         }
         firebaseLogout()
-    }
-    
-    func checkLoginStatatus() -> Bool{
-        return Auth.auth().currentUser != nil
     }
     
     func showUserProfile() {
@@ -73,7 +70,6 @@ class ProfileViewController: UIViewController {
                 if let imageUrl = Auth.auth().currentUser?.photoURL {
                     self.profileImageView.kf.setImage(with: imageUrl)
                 }
-                
             }
         }
         nameLabel.text = user?.displayName

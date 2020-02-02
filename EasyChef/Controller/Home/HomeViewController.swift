@@ -18,7 +18,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     let served = "1-2"
     let estimatedTime = 10
     
-    let imageUrl = URL(string: #"https://www.google.com/url?sa=i&url=http%3A%2F%2Fwww.bbc.com%2Ftravel%2Fstory%2F20180227-is-this-thailands-best-pad-thai&psig=AOvVaw1CUhPZagusXdvL8HmSuIVc&ust=1580718873752000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCODukeq6sucCFQAAAAAdAAAAABAD"#)
+    let db = FirestoreReferenceManager.menusDB
     
     //let padthai = Menu()fromDisplayMenuList: "ผัดไทยกุ้งสด", ownerName: "Kanor", imageUrl:NS URL(string: #"https://firebasestorage.googleapis.com/v0/b/kmitl-semantic-cooking.appspot.com/o/menuImage%2Fผัดไทย.jpg?alt=media&token=43bc4d9f-a941-4fc2-9ae9-4d2a2ccc8ea0"# as! URL), rating: 5, served: "1-2", estimatedTime: 10)
     
@@ -31,13 +31,22 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         self.menuCollectionView.dataSource = self
         self.menuCollectionView.delegate = self
         
-        print(Auth.auth().currentUser?.photoURL)
-        print(imageUrl)
+        adjustCellPadding()
+        
+        db.getDocuments() { (query, error) in
+            if let error = error {
+                print("Something went wrong \(error)")
+            } else {
+                for document in query!.documents {
+                    print("\(document.documentID) => \(document.data())")
+                }
+            }
+        }
     }
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 12
+        return 13
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -49,12 +58,14 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         cell.ratingLabel.text = String(format:"%.1f", rating)
         cell.servedLabel.text = served
         cell.timeLabel.text = String(estimatedTime) + "mins"
-        
-        
         cell.foodImageView.kf.setImage(with: Auth.auth().currentUser?.photoURL)
         
-
+        cell.layer.borderColor = UIColor.lightGray.cgColor
+        cell.layer.borderWidth = 0.5
+        cell.layer.cornerRadius = 10
+        cell.layer.masksToBounds = true
         
+
         return cell
     }
     
@@ -67,6 +78,12 @@ extension HomeViewController:UICollectionViewDelegateFlowLayout {
         let collectionViewSize = collectionView.frame.size.width - padding
         
         return CGSize(width: collectionViewSize/2, height: 200)
+    }
+    
+    func adjustCellPadding() {
+        let layout = self.menuCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        layout.minimumInteritemSpacing = 5
     }
 }
 
