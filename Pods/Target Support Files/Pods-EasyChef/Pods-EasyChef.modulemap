@@ -1,0 +1,6 @@
+framework module Pods_EasyChef {
+  umbrella header "Pods-EasyChef-umbrella.h"
+
+  export *
+  module * { export * }
+}
