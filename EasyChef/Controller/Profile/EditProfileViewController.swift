@@ -9,7 +9,6 @@
 import UIKit
 import Firebase
 import Kingfisher
-import Photos
 
 class EditProfileViewController: UIViewController {
 
@@ -18,16 +17,18 @@ class EditProfileViewController: UIViewController {
     @IBOutlet weak var styleTextField: UITextField!
     
     @IBOutlet weak var profileImageView: UIImageView!
+    
         
     let user = Auth.auth().currentUser
     let userDB = FirestoreReferenceManager.usersDB
+    
+    var newImageUrl:URL?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         showUserProfile()
         configureRoundProfileImage(imageView: profileImageView)
         self.title = "Edit"
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -37,11 +38,11 @@ class EditProfileViewController: UIViewController {
     }
     
     @IBAction func confirmButtonPressed(_ sender: Any) {
-        changeProfileValue()
+        uploadPhotoToStorage()
     }
     
     @IBAction func photoButtonPressed(_ sender: Any) {
-        showImagePickerControllerActionSheet()
+        displayImagePickerControllerActionSheet()
     }
     
     func showUserProfile() {
@@ -58,6 +59,7 @@ class EditProfileViewController: UIViewController {
     }
     
     func changeProfileValue() {
+        
         var newName:String?
         let newAbout = aboutTextField.text
         let newStyle = styleTextField.text
@@ -70,6 +72,7 @@ class EditProfileViewController: UIViewController {
         
         let changeRequest = user?.createProfileChangeRequest()
         changeRequest?.displayName = newName
+        changeRequest?.photoURL = newImageUrl!
         changeRequest?.commitChanges { (error) in
             if let error = error {
                 print(error)
@@ -80,7 +83,7 @@ class EditProfileViewController: UIViewController {
         
         userDB.document(user!.uid).updateData([
             "about": newAbout ?? "",
-            "style": newStyle ?? ""
+            "style": newStyle ?? "",
         ]) { error in
             if let error = error {
                 print("Error updating document: \(error)")
@@ -91,13 +94,45 @@ class EditProfileViewController: UIViewController {
             }
         }
     }
-
-
+    
+    func uploadPhotoToStorage() {
+        
+        guard let image = profileImageView.image,
+            let data = image.jpegData(compressionQuality: 1.0) else {
+            print("error")
+            return
+        }
+        
+        let imageName = (user?.uid)!
+        
+        let imageReference = Storage.storage().reference()
+            .child("userImage")
+            .child(imageName)
+        
+        let metaData = StorageMetadata()
+        metaData.contentType = "image/jpg"
+        
+        imageReference.putData(data, metadata: metaData) { (metadata, error) in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+        }
+        imageReference.downloadURL { (url, error) in
+            if let error = error {
+                print(error)
+                return
+            }
+            self.newImageUrl = url
+            print(self.newImageUrl)
+            self.changeProfileValue()
+        }
+    }
 }
 
 extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    func showImagePickerControllerActionSheet() {
+    func displayImagePickerControllerActionSheet() {
         let photoLibraryAction = UIAlertAction(title: "Choose From Library", style: .default, handler: { (action) in
             self.showImagePicker(sourceType: .photoLibrary)
         })
@@ -126,9 +161,11 @@ extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigati
     
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
-        let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
+        if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
             profileImageView.image = editedImage
-        
+        } else if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            profileImageView.image = originalImage
+        }
         self.dismiss(animated: true, completion: nil)
     }
 

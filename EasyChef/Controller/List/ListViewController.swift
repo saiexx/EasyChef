@@ -19,6 +19,8 @@ class ListViewController: UIViewController, UICollectionViewDataSource, UICollec
     var nameList:[String] = []
     var userList:[String:[String]] = [:]
     
+    var selectedList:String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         adjustCellPadding()
@@ -55,7 +57,7 @@ class ListViewController: UIViewController, UICollectionViewDataSource, UICollec
                 self.nameList = temporaryNameList
 
                 self.listCollectionView.reloadData()
-                print("fetched")
+                print("List Fetched")
             }
         }
     }
@@ -90,6 +92,20 @@ class ListViewController: UIViewController, UICollectionViewDataSource, UICollec
         cell.layer.masksToBounds = true
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        selectedList = nameList[indexPath.row]
+        segueWithoutSender(destination: "goToSelectedList")
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "goToSelectedList" {
+            let destinationVC = segue.destination as! SelectedListViewController
+            destinationVC.listName = selectedList
+        }
     }
 }
 

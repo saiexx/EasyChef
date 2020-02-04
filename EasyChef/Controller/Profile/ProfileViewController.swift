@@ -66,11 +66,10 @@ class ProfileViewController: UIViewController {
                 
                 self.aboutLabel.text = (about as! String)
                 self.styleLabel.text = (style as! String)
-                
-                if let imageUrl = Auth.auth().currentUser?.photoURL {
-                    self.profileImageView.kf.setImage(with: imageUrl)
-                }
             }
+        }
+        if let imageUrl = Auth.auth().currentUser?.photoURL {
+            self.profileImageView.kf.setImage(with: imageUrl)
         }
         nameLabel.text = user?.displayName
         emailLabel.text = user?.email
