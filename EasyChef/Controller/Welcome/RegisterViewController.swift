@@ -83,7 +83,7 @@ class RegisterViewController: UIViewController {
         FirestoreReferenceManager.usersDB.document(uid).setData([
             "style": "",
             "about": "",
-            "myList": ["favorite":[]],
+            "myList": ["Favorite":[]],
             "ownedMenu" : []
         ]) { error in
             if let error = error {

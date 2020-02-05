@@ -9,12 +9,13 @@
 import UIKit
 
 class AlertService {
-    func addListAlert(completion: @escaping (String) -> Void) -> AddListAlertViewController {
+    func addListAlert(for action:String, completion: @escaping (String) -> Void) -> AddListAlertViewController {
         let storyboard = UIStoryboard(name: "AlertStoryboard", bundle: .main)
         
         let alertVC = storyboard.instantiateViewController(withIdentifier: "AddListVC") as! AddListAlertViewController
         
         alertVC.buttonAction = completion
+        alertVC.changeCase = action
         
         return alertVC
     }

@@ -107,7 +107,7 @@ class LoginViewController: UIViewController {
                 userDB.setData([
                     "style": "",
                     "about": "",
-                    "myList": ["favorite":[]],
+                    "myList": ["Favorite":[]],
                     "ownedMenu" : []
                 ])
                 { error in

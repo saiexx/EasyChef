@@ -21,13 +21,17 @@ class ListViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     var selectedList:String?
     
+    var longPressGesture = UILongPressGestureRecognizer()
+    var refreshControl = UIRefreshControl()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         adjustCellPadding()
         fetchUserList()
-        
+        setupLongPressGesture()
         self.listCollectionView.dataSource = self
         self.listCollectionView.delegate = self
+        listCollectionView.alwaysBounceVertical = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -37,11 +41,12 @@ class ListViewController: UIViewController, UICollectionViewDataSource, UICollec
     }
     
     @IBAction func addButtonPressed(_ sender: Any) {
-        let alert = alertService.addListAlert(){ (text) in
-            self.updateList(newList: text)
+        let alert = alertService.addListAlert(for: "add"){ (text) in
+            self.updateList(for: "add", newList: text, currentList: "")
         }
         self.present(alert, animated: true)
     }
+    
     
     func fetchUserList() {
         let userDB = FirestoreReferenceManager.usersDB.document(Auth.auth().currentUser!.uid)
@@ -62,9 +67,19 @@ class ListViewController: UIViewController, UICollectionViewDataSource, UICollec
         }
     }
     
-    func updateList(newList: String) {
+    func updateList(for type:String, newList: String, currentList: String) {
         let userDB = FirestoreReferenceManager.usersDB.document(userID!)
-        userList[newList] = []
+        switch type {
+        case "add":
+            userList[newList] = []
+        case "delete":
+            userList.removeValue(forKey: newList)
+        case "rename":
+            userList[newList] = userList.removeValue(forKey: currentList)
+        default:
+            print("Invalid Type")
+            return
+        }
         userDB.updateData([
             "myList": userList
         ]) { error in
@@ -101,7 +116,6 @@ class ListViewController: UIViewController, UICollectionViewDataSource, UICollec
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         if segue.identifier == "goToSelectedList" {
             let destinationVC = segue.destination as! SelectedListViewController
             destinationVC.listName = selectedList
@@ -109,7 +123,7 @@ class ListViewController: UIViewController, UICollectionViewDataSource, UICollec
     }
 }
 
-extension ListViewController:UICollectionViewDelegateFlowLayout {
+extension ListViewController:UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let padding: CGFloat = 25
@@ -118,9 +132,76 @@ extension ListViewController:UICollectionViewDelegateFlowLayout {
         return CGSize(width: collectionViewSize, height: collectionView.frame.size.height/8)
     }
     
+    
     func adjustCellPadding() {
         let layout = self.listCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         layout.minimumInteritemSpacing = 5
+    }
+    
+    func setupLongPressGesture() {
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(ListViewController.handleLongPressGesture(gestureRecognizer:)))
+        longPressGesture.minimumPressDuration = 1
+        longPressGesture.delaysTouchesBegan = true
+        longPressGesture.delegate = self
+        self.listCollectionView.addGestureRecognizer(longPressGesture)
+    }
+    
+    @objc func handleLongPressGesture(gestureRecognizer: UILongPressGestureRecognizer){
+
+        let press = gestureRecognizer.location(in: listCollectionView)
+        let indexPath = listCollectionView.indexPathForItem(at: press)
+        let cell = listCollectionView.cellForItem(at: indexPath!)
+        
+        if gestureRecognizer.state == UIGestureRecognizer.State.began {
+            
+            cell?.backgroundColor = UIColor.lightGray
+            cell?.layer.borderColor = UIColor.darkGray.cgColor
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                
+                cell?.backgroundColor = UIColor.white
+                cell?.layer.borderColor = UIColor.lightGray.cgColor
+                
+                if let index = indexPath {
+                    if self.nameList[index.row] == "Favorite" {
+                        let alert = UIAlertController(title: "You Cannot Rename or Delete Favorite", message: nil, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+                        self.present(alert, animated: true)
+                        return
+                    }
+                    self.displayAdjustCellActionSheet(list: self.nameList[index.row])
+                } else {
+                    print("Couldn't find index path")
+                }
+            }
+        } else if gestureRecognizer.state == UIGestureRecognizer.State.ended {
+            return
+        }
+        
+    }
+    
+    func displayAdjustCellActionSheet(list:String) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Rename", style: .default){ action in
+            let alert = self.alertService.addListAlert(for: "rename"){ (text) in
+                self.updateList(for: "rename", newList: text, currentList: list)
+            }
+            self.present(alert, animated: true)
+        })
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive){ action in
+            self.displayDeleteCellAlert(list: list)
+        })
+        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+        self.present(alert, animated: true)
+    }
+    
+    func displayDeleteCellAlert(list:String) {
+        let alert = UIAlertController(title: "Delete \(list)", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive){ action in
+            self.updateList(for: "delete", newList: list, currentList: "")
+        })
+        self.present(alert, animated: true)
     }
 }

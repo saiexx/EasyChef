@@ -20,19 +20,11 @@ class SelectedListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        checkListName()
         print(listName!)
     }
     
     @IBAction func moreButtonPressed(_ sender: Any) {
         displayMoreActionSheet()
-    }
-    
-    func checkListName() {
-        if listName == "favorite" {
-            moreButton.image = nil
-            moreButton.title = nil
-        }
     }
     
     func fetchUserList() {
@@ -47,23 +39,11 @@ extension SelectedListViewController {
         
         alert.addAction(UIAlertAction(title: "Delete Menu ", style: .default, handler: nil))
         
-        alert.addAction(UIAlertAction(title: "Delete List", style: .default, handler: { (action) in
-            self.displayDeleteAlert(name: self.listName!)
-        }))
+        alert.addAction(UIAlertAction(title: "Delete List", style: .default, handler: nil))
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
         self.present(alert, animated: true)
     }
     
-    func displayDeleteAlert(name:String) {
-        
-        let alert = UIAlertController(title: #"Delete "\#(name)""#, message: nil, preferredStyle: .alert)
-        
-        alert.addAction(UIAlertAction(title: "Delete", style: .default, handler: nil))
-        
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        
-        self.present(alert, animated: true)
-    }
 }

@@ -19,11 +19,11 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="08R-o4-8GN">
                                 <rect key="frame" x="69.5" y="373" width="275" height="150"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="JAT-nF-r5h">
-                                        <rect key="frame" x="8" y="112" width="259" height="30"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="JAT-nF-r5h">
+                                        <rect key="frame" x="0.0" y="110" width="275" height="40"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qUS-Cq-Gfg">
-                                                <rect key="frame" x="0.0" y="0.0" width="121.5" height="30"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="137.5" height="40"/>
                                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <state key="normal" title="Cancel">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -33,7 +33,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qY6-Ix-hCG">
-                                                <rect key="frame" x="137.5" y="0.0" width="121.5" height="30"/>
+                                                <rect key="frame" x="137.5" y="0.0" width="137.5" height="40"/>
                                                 <color key="backgroundColor" red="0.23438078170000001" green="0.15068322419999999" blue="0.027413906530000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <state key="normal" title="Add">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -43,9 +43,12 @@
                                                 </connections>
                                             </button>
                                         </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="6DI-Xg-dvB"/>
+                                        </constraints>
                                     </stackView>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="List" textAlignment="center" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="FO8-MU-WSr">
-                                        <rect key="frame" x="8" y="70" width="259" height="24"/>
+                                        <rect key="frame" x="8" y="65" width="259" height="24"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
@@ -68,19 +71,27 @@
                                             <constraint firstAttribute="height" constant="55" id="pYe-4n-6XJ"/>
                                         </constraints>
                                     </view>
+                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="*Your List Should Have a Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4G1-S6-O3I">
+                                        <rect key="frame" x="63" y="95" width="149.5" height="12"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                        <color key="textColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
-                                    <constraint firstItem="FO8-MU-WSr" firstAttribute="top" secondItem="xVX-I7-aHS" secondAttribute="bottom" constant="15" id="2YC-Pu-3ih"/>
+                                    <constraint firstItem="FO8-MU-WSr" firstAttribute="top" secondItem="xVX-I7-aHS" secondAttribute="bottom" constant="10" id="2YC-Pu-3ih"/>
+                                    <constraint firstItem="JAT-nF-r5h" firstAttribute="leading" secondItem="08R-o4-8GN" secondAttribute="leading" id="4EO-Tq-5RU"/>
                                     <constraint firstAttribute="trailing" secondItem="FO8-MU-WSr" secondAttribute="trailing" constant="8" id="74H-YJ-8lf"/>
                                     <constraint firstItem="xVX-I7-aHS" firstAttribute="leading" secondItem="08R-o4-8GN" secondAttribute="leading" id="BO2-dh-CQv"/>
-                                    <constraint firstAttribute="bottomMargin" secondItem="JAT-nF-r5h" secondAttribute="bottom" id="EVm-El-xaD"/>
                                     <constraint firstItem="FO8-MU-WSr" firstAttribute="leading" secondItem="08R-o4-8GN" secondAttribute="leading" constant="8" id="OIh-7G-tiH"/>
-                                    <constraint firstItem="JAT-nF-r5h" firstAttribute="leading" secondItem="08R-o4-8GN" secondAttribute="leadingMargin" id="PF2-4l-u73"/>
                                     <constraint firstItem="xVX-I7-aHS" firstAttribute="top" secondItem="08R-o4-8GN" secondAttribute="top" id="ZaB-MV-4b7"/>
+                                    <constraint firstAttribute="bottom" secondItem="JAT-nF-r5h" secondAttribute="bottom" id="p9g-JT-Fq5"/>
+                                    <constraint firstItem="4G1-S6-O3I" firstAttribute="centerX" secondItem="08R-o4-8GN" secondAttribute="centerX" id="rkZ-cC-73e"/>
                                     <constraint firstAttribute="trailing" secondItem="xVX-I7-aHS" secondAttribute="trailing" id="swT-yH-0ZP"/>
-                                    <constraint firstAttribute="trailingMargin" secondItem="JAT-nF-r5h" secondAttribute="trailing" id="v4Q-NK-ry2"/>
+                                    <constraint firstItem="JAT-nF-r5h" firstAttribute="top" secondItem="4G1-S6-O3I" secondAttribute="bottom" constant="3" id="t2G-O3-Jgq"/>
                                     <constraint firstAttribute="width" constant="275" id="w8I-ZM-tIS"/>
+                                    <constraint firstAttribute="trailing" secondItem="JAT-nF-r5h" secondAttribute="trailing" id="wCA-Hi-2oI"/>
                                     <constraint firstAttribute="height" constant="150" id="wLp-UL-N22"/>
                                 </constraints>
                             </view>
@@ -93,8 +104,11 @@
                         <viewLayoutGuide key="safeArea" id="s6L-z6-zd6"/>
                     </view>
                     <connections>
+                        <outlet property="addButton" destination="qY6-Ix-hCG" id="9Gj-Cp-VQD"/>
                         <outlet property="alertView" destination="08R-o4-8GN" id="QfF-Ob-Yxp"/>
                         <outlet property="listTextField" destination="FO8-MU-WSr" id="4Eu-x8-U6E"/>
+                        <outlet property="titleLabel" destination="ffr-9d-R5m" id="B6F-Nl-sgc"/>
+                        <outlet property="warningLabel" destination="4G1-S6-O3I" id="m41-eR-j30"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wgy-yO-OlX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
