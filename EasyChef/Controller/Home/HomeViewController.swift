@@ -10,22 +10,19 @@ import UIKit
 import Firebase
 import Kingfisher
 
-class HomeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class HomeViewController: UIViewController{
     
-    let name = "ผัดไทยกุ้งสด"
-    let ownerName = "Kanor"
-    let rating:Double = 5
-    let served = "1-2"
-    let estimatedTime = 10
+    var menuData:[Menu] = []
     
     let db = FirestoreReferenceManager.menusDB
     
-    //let padthai = Menu()fromDisplayMenuList: "ผัดไทยกุ้งสด", ownerName: "Kanor", imageUrl:NS URL(string: #"https://firebasestorage.googleapis.com/v0/b/kmitl-semantic-cooking.appspot.com/o/menuImage%2Fผัดไทย.jpg?alt=media&token=43bc4d9f-a941-4fc2-9ae9-4d2a2ccc8ea0"# as! URL), rating: 5, served: "1-2", estimatedTime: 10)
-    
     @IBOutlet weak var menuCollectionView: UICollectionView!
+    
+    var selectedMenu:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.barStyle = .black
         addNavBarImage(viewController: self)
         
         self.menuCollectionView.dataSource = self
@@ -33,42 +30,74 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         
         adjustCellPadding()
         
-        db.getDocuments() { (query, error) in
+        fetchMenu()
+    }
+    
+    func fetchMenu() {
+        db.order(by: "createdTime", descending: true).getDocuments() { (query, error) in
             if let error = error {
                 print("Something went wrong \(error)")
             } else {
                 for document in query!.documents {
-                    print("\(document.documentID) => \(document.data())")
+                    let menu = document.data()
+                    
+                    let name = menu["name"] as! String
+                    let foodId = document.documentID
+                    let ownerName = menu["ownerName"] as! String
+                    let imageUrlString = menu["imageUrl"] as! String
+                    let estimatedTime = menu["estimatedTime"] as! Int
+                    let rating = menu["rating"] as! [String:Int]
+                    let served = menu["served"] as! String
+                    let createdTimeTimestamp = menu["createdTime"] as! Timestamp
+                    let createdTime = TimeInterval(createdTimeTimestamp.seconds)
+                    
+                    let menuStruct = Menu(forList: name, id: foodId, ownerName: ownerName, imageUrl: imageUrlString, estimatedTime: estimatedTime, rating: rating, served: served, createdTime: createdTime)
+                    
+                    self.menuData.append(menuStruct)
+                    self.menuCollectionView.reloadData()
                 }
             }
         }
     }
     
-    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToViewMenuScreen" {
+            let destination = segue.destination as! ViewMenuViewController
+            destination.foodId = selectedMenu
+        }
+    }
+}
+
+extension HomeViewController:UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 13
+        return menuData.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Food", for: indexPath) as! MenuCollectionViewCell
         
-        cell.foodNameLabel.text = name
-        cell.ownerLabel.text = ownerName
-        cell.ratingLabel.text = String(format:"%.1f", rating)
-        cell.servedLabel.text = served
-        cell.timeLabel.text = String(estimatedTime) + "mins"
-        cell.foodImageView.kf.setImage(with: Auth.auth().currentUser?.photoURL)
+        let row = indexPath.row
+        
+        cell.foodNameLabel.text = menuData[row].name
+        cell.ownerLabel.text = menuData[row].ownerName
+        cell.ratingLabel.text = String(format:"%.1f(\(menuData[row].numberOfUserRated!))", menuData[row].averageRating!)
+        cell.servedLabel.text = menuData[row].served
+        cell.timeLabel.text = String(menuData[row].estimatedTime!) + "mins"
+        cell.foodImageView.kf.setImage(with:menuData[row].imageUrl)
         
         cell.layer.borderColor = UIColor.lightGray.cgColor
         cell.layer.borderWidth = 0.5
         cell.layer.cornerRadius = 10
         cell.layer.masksToBounds = true
         
-
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        selectedMenu = menuData[indexPath.row].foodId
+        segueWithoutSender(destination: "goToViewMenuScreen")
+    }
 }
 
 extension HomeViewController:UICollectionViewDelegateFlowLayout {

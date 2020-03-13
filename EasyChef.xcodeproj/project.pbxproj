@@ -9,6 +9,13 @@
 /* Begin PBXBuildFile section */
 		2E854314DC657442DF957FA2 /* Pods_EasyChef.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5F19618E9320E987D762873 /* Pods_EasyChef.framework */; };
 		423F459D1DCF0B668DB6742E /* Pods_EasyChefTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72434D2BB5E50DA56B6BD34C /* Pods_EasyChefTests.framework */; };
+		8B1CA8BC23EB4ABF005E1CA9 /* HeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1CA8BB23EB4ABF005E1CA9 /* HeaderTableViewCell.swift */; };
+		8B1CA8BE23EB4DD4005E1CA9 /* DescriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1CA8BD23EB4DD4005E1CA9 /* DescriptionTableViewCell.swift */; };
+		8B1CA8C023EB4E25005E1CA9 /* OwnedMenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1CA8BF23EB4E25005E1CA9 /* OwnedMenuTableViewCell.swift */; };
+		8B1CA8C223ED412E005E1CA9 /* MenuContentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1CA8C123ED412E005E1CA9 /* MenuContentTableViewCell.swift */; };
+		8B1CA8C423ED41A4005E1CA9 /* OwnedFoodCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1CA8C323ED41A4005E1CA9 /* OwnedFoodCollectionViewCell.swift */; };
+		8B1CA8C723EEB54D005E1CA9 /* ProfileImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1CA8C623EEB54D005E1CA9 /* ProfileImageTableViewCell.swift */; };
+		8B1CA8C923EEB58A005E1CA9 /* EditProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1CA8C823EEB58A005E1CA9 /* EditProfileTableViewCell.swift */; };
 		8B296E5623D9870500C9C045 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B296E5523D9870500C9C045 /* AppDelegate.swift */; };
 		8B296E5823D9870500C9C045 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B296E5723D9870500C9C045 /* SceneDelegate.swift */; };
 		8B296E5D23D9870500C9C045 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B296E5B23D9870500C9C045 /* Main.storyboard */; };
@@ -27,6 +34,9 @@
 		8B296EA223DAC6D000C9C045 /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8B296EA123DAC6D000C9C045 /* FacebookCore */; };
 		8B296EA423DAC6D000C9C045 /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 8B296EA323DAC6D000C9C045 /* FacebookLogin */; };
 		8B296EA623DDA34300C9C045 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B296EA523DDA34300C9C045 /* GoogleService-Info.plist */; };
+		8B4393BA240507E8005E5B40 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4393B9240507E8005E5B40 /* CustomTabBar.swift */; };
+		8B4393BD24050DE0005E5B40 /* ReusableIngredient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4393BC24050DE0005E5B40 /* ReusableIngredient.swift */; };
+		8B4393C124050F39005E5B40 /* ReusableIngredient.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B4393C024050F39005E5B40 /* ReusableIngredient.xib */; };
 		8B46A73D23DF279E00D8A847 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B46A73C23DF279E00D8A847 /* Extension.swift */; };
 		8B46A73F23DF366700D8A847 /* FirestoreReferenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B46A73E23DF366700D8A847 /* FirestoreReferenceManager.swift */; };
 		8B46A74123DF518E00D8A847 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B46A74023DF518E00D8A847 /* EditProfileViewController.swift */; };
@@ -37,7 +47,11 @@
 		8BD72AE623E727B7005404E2 /* AlertStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BD72AE523E727B7005404E2 /* AlertStoryboard.storyboard */; };
 		8BD72AE823E7280B005404E2 /* AddListAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD72AE723E7280B005404E2 /* AddListAlertViewController.swift */; };
 		8BD72AEB23E72E8D005404E2 /* AlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD72AEA23E72E8D005404E2 /* AlertService.swift */; };
-		8BD72AED23E93B04005404E2 /* CreateMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD72AEC23E93B04005404E2 /* CreateMenuViewController.swift */; };
+		8BF96F0723F04B3B00B6D3DF /* ViewMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF96F0623F04B3B00B6D3DF /* ViewMenuViewController.swift */; };
+		8BF96F0A23F0667B00B6D3DF /* FoodDescriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF96F0923F0667B00B6D3DF /* FoodDescriptionTableViewCell.swift */; };
+		8BF96F0C23F096C300B6D3DF /* MenuHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF96F0B23F096C300B6D3DF /* MenuHeaderView.swift */; };
+		8BF96F0E23F173C300B6D3DF /* IngredientsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF96F0D23F173C300B6D3DF /* IngredientsTableViewCell.swift */; };
+		8BF96F1023F1988E00B6D3DF /* DirectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF96F0F23F1988E00B6D3DF /* DirectionTableViewCell.swift */; };
 		9A45F29949F9E68CB89295DA /* Pods_EasyChef_EasyChefUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BE3DA11E2C14B7CE1575711 /* Pods_EasyChef_EasyChefUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +79,13 @@
 		3B1A03F44B070543EFF11FE1 /* Pods-EasyChef-EasyChefUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyChef-EasyChefUITests.debug.xcconfig"; path = "Target Support Files/Pods-EasyChef-EasyChefUITests/Pods-EasyChef-EasyChefUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		5BE3DA11E2C14B7CE1575711 /* Pods_EasyChef_EasyChefUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EasyChef_EasyChefUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		72434D2BB5E50DA56B6BD34C /* Pods_EasyChefTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EasyChefTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B1CA8BB23EB4ABF005E1CA9 /* HeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderTableViewCell.swift; sourceTree = "<group>"; };
+		8B1CA8BD23EB4DD4005E1CA9 /* DescriptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionTableViewCell.swift; sourceTree = "<group>"; };
+		8B1CA8BF23EB4E25005E1CA9 /* OwnedMenuTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnedMenuTableViewCell.swift; sourceTree = "<group>"; };
+		8B1CA8C123ED412E005E1CA9 /* MenuContentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuContentTableViewCell.swift; sourceTree = "<group>"; };
+		8B1CA8C323ED41A4005E1CA9 /* OwnedFoodCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnedFoodCollectionViewCell.swift; sourceTree = "<group>"; };
+		8B1CA8C623EEB54D005E1CA9 /* ProfileImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageTableViewCell.swift; sourceTree = "<group>"; };
+		8B1CA8C823EEB58A005E1CA9 /* EditProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileTableViewCell.swift; sourceTree = "<group>"; };
 		8B296E5223D9870500C9C045 /* EaziChef.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EaziChef.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B296E5523D9870500C9C045 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8B296E5723D9870500C9C045 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -87,6 +108,9 @@
 		8B296E9423DA067D00C9C045 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		8B296E9823DAA98300C9C045 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		8B296EA523DDA34300C9C045 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8B4393B9240507E8005E5B40 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
+		8B4393BC24050DE0005E5B40 /* ReusableIngredient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableIngredient.swift; sourceTree = "<group>"; };
+		8B4393C024050F39005E5B40 /* ReusableIngredient.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReusableIngredient.xib; sourceTree = "<group>"; };
 		8B46A73C23DF279E00D8A847 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		8B46A73E23DF366700D8A847 /* FirestoreReferenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreReferenceManager.swift; sourceTree = "<group>"; };
 		8B46A74023DF518E00D8A847 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
@@ -97,7 +121,11 @@
 		8BD72AE523E727B7005404E2 /* AlertStoryboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AlertStoryboard.storyboard; sourceTree = "<group>"; };
 		8BD72AE723E7280B005404E2 /* AddListAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddListAlertViewController.swift; sourceTree = "<group>"; };
 		8BD72AEA23E72E8D005404E2 /* AlertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertService.swift; sourceTree = "<group>"; };
-		8BD72AEC23E93B04005404E2 /* CreateMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMenuViewController.swift; sourceTree = "<group>"; };
+		8BF96F0623F04B3B00B6D3DF /* ViewMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewMenuViewController.swift; sourceTree = "<group>"; };
+		8BF96F0923F0667B00B6D3DF /* FoodDescriptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodDescriptionTableViewCell.swift; sourceTree = "<group>"; };
+		8BF96F0B23F096C300B6D3DF /* MenuHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuHeaderView.swift; sourceTree = "<group>"; };
+		8BF96F0D23F173C300B6D3DF /* IngredientsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientsTableViewCell.swift; sourceTree = "<group>"; };
+		8BF96F0F23F1988E00B6D3DF /* DirectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionTableViewCell.swift; sourceTree = "<group>"; };
 		B5F19618E9320E987D762873 /* Pods_EasyChef.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EasyChef.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D97B4D63AB052514C3BCE1DA /* Pods-EasyChef.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyChef.debug.xcconfig"; path = "Target Support Files/Pods-EasyChef/Pods-EasyChef.debug.xcconfig"; sourceTree = "<group>"; };
 		FB5F9415D864291A7A94EB8E /* Pods-EasyChefTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyChefTests.release.xcconfig"; path = "Target Support Files/Pods-EasyChefTests/Pods-EasyChefTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -144,6 +172,27 @@
 				FB5F9415D864291A7A94EB8E /* Pods-EasyChefTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		8B1CA8BA23EB4A92005E1CA9 /* ProfileCell */ = {
+			isa = PBXGroup;
+			children = (
+				8B1CA8BB23EB4ABF005E1CA9 /* HeaderTableViewCell.swift */,
+				8B1CA8BD23EB4DD4005E1CA9 /* DescriptionTableViewCell.swift */,
+				8B1CA8BF23EB4E25005E1CA9 /* OwnedMenuTableViewCell.swift */,
+				8B1CA8C123ED412E005E1CA9 /* MenuContentTableViewCell.swift */,
+				8B1CA8C323ED41A4005E1CA9 /* OwnedFoodCollectionViewCell.swift */,
+			);
+			path = ProfileCell;
+			sourceTree = "<group>";
+		};
+		8B1CA8C523EEB2E6005E1CA9 /* EditCell */ = {
+			isa = PBXGroup;
+			children = (
+				8B1CA8C623EEB54D005E1CA9 /* ProfileImageTableViewCell.swift */,
+				8B1CA8C823EEB58A005E1CA9 /* EditProfileTableViewCell.swift */,
+			);
+			path = EditCell;
 			sourceTree = "<group>";
 		};
 		8B296E4923D9870500C9C045 = {
@@ -214,6 +263,7 @@
 		8B296E8623D9C1DF00C9C045 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				8B4393B624050784005E5B40 /* Tabbar */,
 				8BD72AE923E72E1F005404E2 /* CustomAlert */,
 				8B296E9D23DAACB900C9C045 /* Profile */,
 				8B296E9C23DAACA500C9C045 /* Menu */,
@@ -237,7 +287,12 @@
 		8B296E9A23DAAC6000C9C045 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				8BF96F0823F0662800B6D3DF /* TableViewCell */,
+				8BF96F0423EF0DA800B6D3DF /* CollectionViewCell */,
 				8B296E8723D9C20B00C9C045 /* HomeViewController.swift */,
+				8BF96F0623F04B3B00B6D3DF /* ViewMenuViewController.swift */,
+				8B4393BC24050DE0005E5B40 /* ReusableIngredient.swift */,
+				8B4393C024050F39005E5B40 /* ReusableIngredient.xib */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -245,6 +300,7 @@
 		8B296E9B23DAAC9B00C9C045 /* List */ = {
 			isa = PBXGroup;
 			children = (
+				8BF96F0523EF0DC800B6D3DF /* CollectionViewCell */,
 				8B296E8B23D9C23800C9C045 /* ListViewController.swift */,
 				8BD72AE223E71FED005404E2 /* SelectedListViewController.swift */,
 			);
@@ -255,7 +311,6 @@
 			isa = PBXGroup;
 			children = (
 				8B296E8923D9C22800C9C045 /* OwnedMenuViewController.swift */,
-				8BD72AEC23E93B04005404E2 /* CreateMenuViewController.swift */,
 			);
 			path = Menu;
 			sourceTree = "<group>";
@@ -263,17 +318,25 @@
 		8B296E9D23DAACB900C9C045 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				8B1CA8C523EEB2E6005E1CA9 /* EditCell */,
+				8B1CA8BA23EB4A92005E1CA9 /* ProfileCell */,
 				8B296E8D23D9C24A00C9C045 /* ProfileViewController.swift */,
 				8B46A74023DF518E00D8A847 /* EditProfileViewController.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
 		};
+		8B4393B624050784005E5B40 /* Tabbar */ = {
+			isa = PBXGroup;
+			children = (
+				8B4393B9240507E8005E5B40 /* CustomTabBar.swift */,
+			);
+			path = Tabbar;
+			sourceTree = "<group>";
+		};
 		8B46A74423E1F40800D8A847 /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				8BD72AA023E5FB89005404E2 /* MenuCollectionViewCell.swift */,
-				8BD72AE023E7112A005404E2 /* ListCollectionViewCell.swift */,
 				8B46A73C23DF279E00D8A847 /* Extension.swift */,
 				8B46A73E23DF366700D8A847 /* FirestoreReferenceManager.swift */,
 				8BD72AEA23E72E8D005404E2 /* AlertService.swift */,
@@ -297,6 +360,33 @@
 				8BD72AE723E7280B005404E2 /* AddListAlertViewController.swift */,
 			);
 			path = CustomAlert;
+			sourceTree = "<group>";
+		};
+		8BF96F0423EF0DA800B6D3DF /* CollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				8BD72AA023E5FB89005404E2 /* MenuCollectionViewCell.swift */,
+			);
+			path = CollectionViewCell;
+			sourceTree = "<group>";
+		};
+		8BF96F0523EF0DC800B6D3DF /* CollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				8BD72AE023E7112A005404E2 /* ListCollectionViewCell.swift */,
+			);
+			path = CollectionViewCell;
+			sourceTree = "<group>";
+		};
+		8BF96F0823F0662800B6D3DF /* TableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				8BF96F0923F0667B00B6D3DF /* FoodDescriptionTableViewCell.swift */,
+				8BF96F0B23F096C300B6D3DF /* MenuHeaderView.swift */,
+				8BF96F0D23F173C300B6D3DF /* IngredientsTableViewCell.swift */,
+				8BF96F0F23F1988E00B6D3DF /* DirectionTableViewCell.swift */,
+			);
+			path = TableViewCell;
 			sourceTree = "<group>";
 		};
 		B029F338246B2F9CF22DEB46 /* Frameworks */ = {
@@ -428,6 +518,7 @@
 				8B296E6223D9870600C9C045 /* LaunchScreen.storyboard in Resources */,
 				8B296EA623DDA34300C9C045 /* GoogleService-Info.plist in Resources */,
 				8B296E5F23D9870600C9C045 /* Assets.xcassets in Resources */,
+				8B4393C124050F39005E5B40 /* ReusableIngredient.xib in Resources */,
 				8B296E5D23D9870500C9C045 /* Main.storyboard in Resources */,
 				8BD72AE623E727B7005404E2 /* AlertStoryboard.storyboard in Resources */,
 			);
@@ -558,23 +649,36 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B46A74123DF518E00D8A847 /* EditProfileViewController.swift in Sources */,
+				8BF96F0E23F173C300B6D3DF /* IngredientsTableViewCell.swift in Sources */,
+				8BF96F0C23F096C300B6D3DF /* MenuHeaderView.swift in Sources */,
+				8BF96F0723F04B3B00B6D3DF /* ViewMenuViewController.swift in Sources */,
+				8B1CA8C923EEB58A005E1CA9 /* EditProfileTableViewCell.swift in Sources */,
 				8B296E9523DA067D00C9C045 /* RegisterViewController.swift in Sources */,
+				8B1CA8BE23EB4DD4005E1CA9 /* DescriptionTableViewCell.swift in Sources */,
 				8BD72A9F23E5E64D005404E2 /* Menu.swift in Sources */,
 				8B296E8E23D9C24A00C9C045 /* ProfileViewController.swift in Sources */,
+				8B1CA8C723EEB54D005E1CA9 /* ProfileImageTableViewCell.swift in Sources */,
+				8B4393BD24050DE0005E5B40 /* ReusableIngredient.swift in Sources */,
 				8B296E5623D9870500C9C045 /* AppDelegate.swift in Sources */,
 				8BD72AE323E71FED005404E2 /* SelectedListViewController.swift in Sources */,
 				8B46A73F23DF366700D8A847 /* FirestoreReferenceManager.swift in Sources */,
 				8B296E5823D9870500C9C045 /* SceneDelegate.swift in Sources */,
 				8B46A73D23DF279E00D8A847 /* Extension.swift in Sources */,
+				8B1CA8C423ED41A4005E1CA9 /* OwnedFoodCollectionViewCell.swift in Sources */,
 				8B296E8823D9C20B00C9C045 /* HomeViewController.swift in Sources */,
+				8B1CA8BC23EB4ABF005E1CA9 /* HeaderTableViewCell.swift in Sources */,
+				8B1CA8C223ED412E005E1CA9 /* MenuContentTableViewCell.swift in Sources */,
 				8B296E9323DA066F00C9C045 /* LoginViewController.swift in Sources */,
 				8BD72AE123E7112A005404E2 /* ListCollectionViewCell.swift in Sources */,
 				8BD72AEB23E72E8D005404E2 /* AlertService.swift in Sources */,
+				8B1CA8C023EB4E25005E1CA9 /* OwnedMenuTableViewCell.swift in Sources */,
+				8BF96F0A23F0667B00B6D3DF /* FoodDescriptionTableViewCell.swift in Sources */,
+				8B4393BA240507E8005E5B40 /* CustomTabBar.swift in Sources */,
 				8B296E8C23D9C23800C9C045 /* ListViewController.swift in Sources */,
 				8B296E9923DAA98300C9C045 /* User.swift in Sources */,
+				8BF96F1023F1988E00B6D3DF /* DirectionTableViewCell.swift in Sources */,
 				8B296E8A23D9C22800C9C045 /* OwnedMenuViewController.swift in Sources */,
 				8B296E9023D9C5CB00C9C045 /* WelcomeViewController.swift in Sources */,
-				8BD72AED23E93B04005404E2 /* CreateMenuViewController.swift in Sources */,
 				8BD72AE823E7280B005404E2 /* AddListAlertViewController.swift in Sources */,
 				8BD72AA123E5FB89005404E2 /* MenuCollectionViewCell.swift in Sources */,
 			);

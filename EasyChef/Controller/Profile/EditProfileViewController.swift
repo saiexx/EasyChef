@@ -11,38 +11,49 @@ import Firebase
 import Kingfisher
 
 class EditProfileViewController: UIViewController {
-
-    @IBOutlet weak var nameTextField: UITextField!
-    @IBOutlet weak var aboutTextField: UITextField!
-    @IBOutlet weak var styleTextField: UITextField!
     
-    @IBOutlet weak var profileImageView: UIImageView!
-    
+    @IBOutlet weak var editTableView: UITableView!
         
     let user = Auth.auth().currentUser
     let userDB = FirestoreReferenceManager.usersDB
     
-    var newImageUrl:URL?
+    var imageUrl:URL?
+    
+    var name:String?
+    var about:String?
+    var style:String?
+    var image:UIImage?
+    
+    
+    struct Storyboard {
+        static let image = "Image"
+        static let profile = "Profile"
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         showUserProfile()
-        configureRoundProfileImage(imageView: profileImageView)
+        setTableView()
+        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:)))
+        view.addGestureRecognizer(tap)
         self.title = "Edit"
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        profileImageView.kf.setImage(with: user?.photoURL)
-        tabBarController?.tabBar.isHidden = false
+    func setTableView() {
+        editTableView.dataSource = self
+        editTableView.delegate = self
+        editTableView.rowHeight = UITableView.automaticDimension
+        editTableView.estimatedRowHeight = editTableView.rowHeight
+        editTableView.separatorColor = UIColor.clear
     }
     
     @IBAction func confirmButtonPressed(_ sender: Any) {
-        uploadPhotoToStorage()
-    }
-    
-    @IBAction func photoButtonPressed(_ sender: Any) {
-        displayImagePickerControllerActionSheet()
+        if image != nil {
+            uploadPhotoToStorage()
+        } else {
+            imageUrl = user?.photoURL
+            changeProfileValue()
+        }
     }
     
     func showUserProfile() {
@@ -51,54 +62,69 @@ class EditProfileViewController: UIViewController {
                 let about = document.get("about")
                 let style = document.get("style")
                 
-                self.aboutTextField.text = (about as! String)
-                self.styleTextField.text = (style as! String)
+                self.about = (about as! String)
+                self.style = (style as! String)
+                self.editTableView.reloadData()
             }
         }
-        nameTextField.text = user?.displayName
+        name = user?.displayName
+        editTableView.reloadData()
     }
     
     func changeProfileValue() {
         
-        var newName:String?
-        let newAbout = aboutTextField.text
-        let newStyle = styleTextField.text
+        let indexPath = IndexPath(row: 1, section: 0)
+        let cell = editTableView.cellForRow(at: indexPath) as! EditProfileTableViewCell
         
-        if nameTextField.text!.isEmpty {
-            newName = user?.email
-        } else {
-            newName = nameTextField.text
+        name = cell.nameTextField.text
+        style = cell.styleTextField.text
+        about = cell.aboutTextField.text
+        
+        if cell.nameTextField.text!.isEmpty {
+            name = user?.email
+        }
+        
+        var imgUrl = user?.photoURL
+        var imgUrlString = imgUrl?.absoluteString
+        let email = user?.email
+        
+        func updateDatabase() {
+            userDB.document(user!.uid).updateData([
+                "about": self.about ?? "",
+                "style": self.style ?? "",
+                "email": email ?? "",
+                "name": name ?? "",
+                "imageUrl": imgUrlString as Any,
+            ]) { error in
+                if let error = error {
+                    print("Error updating document: \(error)")
+                } else {
+                    print("Document Successfully updated")
+                   _ = self.navigationController?.popViewController(animated: true)
+                }
+            }
         }
         
         let changeRequest = user?.createProfileChangeRequest()
-        changeRequest?.displayName = newName
-        changeRequest?.photoURL = newImageUrl!
+        changeRequest?.displayName = name
+        changeRequest?.photoURL = imageUrl
         changeRequest?.commitChanges { (error) in
             if let error = error {
                 print(error)
                 return
             }
-            print("Display Name Successfully Updated")
-        }
-        
-        userDB.document(user!.uid).updateData([
-            "about": newAbout ?? "",
-            "style": newStyle ?? "",
-        ]) { error in
-            if let error = error {
-                print("Error updating document: \(error)")
-            } else {
-                print("Document Successfully updated")
-                _ = self.navigationController?.popViewController(animated: true)
-
-            }
+            print("Profile Successfully Updated")
+            imgUrl = self.user?.photoURL
+            imgUrlString = imgUrl?.absoluteString
+            updateDatabase()
         }
     }
     
     func uploadPhotoToStorage() {
         
-        guard let image = profileImageView.image,
-            let data = image.jpegData(compressionQuality: 1.0) else {
+        let randomNumber = Int.random(in: 0...10000)
+        
+        guard let data = image!.jpegData(compressionQuality: 1.0) else {
             print("error")
             return
         }
@@ -108,6 +134,7 @@ class EditProfileViewController: UIViewController {
         let imageReference = Storage.storage().reference()
             .child("userImage")
             .child(imageName)
+            .child(imageName + String(randomNumber) + ".jpg")
         
         let metaData = StorageMetadata()
         metaData.contentType = "image/jpg"
@@ -117,17 +144,20 @@ class EditProfileViewController: UIViewController {
                 print(error.localizedDescription)
                 return
             }
-        }
-        imageReference.downloadURL { (url, error) in
-            if let error = error {
-                print(error)
-                return
+            print("Upload successful")
+            imageReference.downloadURL { (url, error) in
+                if let error = error {
+                    print(error.localizedDescription)
+                    return
+                }
+                print("Get download Url")
+                self.imageUrl = url
+                self.changeProfileValue()
             }
-            self.newImageUrl = url
-            print(self.newImageUrl)
-            self.changeProfileValue()
         }
     }
+    
+    
 }
 
 extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -162,11 +192,60 @@ extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigati
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
         if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
-            profileImageView.image = editedImage
+            image = editedImage
         } else if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            profileImageView.image = originalImage
+            image = originalImage
         }
-        self.dismiss(animated: true, completion: nil)
+        editTableView.reloadData()
+        picker.dismiss(animated: true, completion: nil)
     }
 
+}
+
+extension EditProfileViewController:UITableViewDataSource, UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 2
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.row == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: Storyboard.image, for: indexPath) as! ProfileImageTableViewCell
+            
+            configureRoundProfileImage(imageView: cell.profileImageView)
+            if image != nil {
+                cell.profileImageView.image = image
+            } else {
+                if user?.photoURL == nil {
+                    cell.profileImageView.image = #imageLiteral(resourceName: "default-profile-picture")
+                } else {
+                    cell.profileImageView.kf.setImage(with: user?.photoURL)
+                }
+            }
+            
+            cell.selectionStyle = .none
+            
+            cell.delegate = self
+            
+            return cell
+        } else if indexPath.row == 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: Storyboard.profile, for: indexPath) as! EditProfileTableViewCell
+            
+            cell.nameTextField.text = name ?? ""
+            cell.styleTextField.text = style ?? ""
+            cell.aboutTextField.text = about ?? ""
+            
+            cell.selectionStyle = .none
+            
+            return cell
+        }
+        return UITableViewCell()
+    }
+
+}
+
+extension EditProfileViewController: ProfileImageTableViewCellDelegate {
+    func cameraButtonPressed() {
+        displayImagePickerControllerActionSheet()
+    }
 }

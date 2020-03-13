@@ -16,12 +16,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="front_5" translatesAutoresizingMaskIntoConstraints="NO" id="6dE-FT-oVR">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="front_5" translatesAutoresizingMaskIntoConstraints="NO" id="6dE-FT-oVR">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="6dE-FT-oVR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="8hY-TY-49v"/>
+                            <constraint firstItem="6dE-FT-oVR" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="MlZ-cV-NVc"/>
+                            <constraint firstItem="6dE-FT-oVR" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="nct-kg-Jv4"/>
+                            <constraint firstAttribute="bottom" secondItem="6dE-FT-oVR" secondAttribute="bottom" id="nt0-y5-v9w"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>

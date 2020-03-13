@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class ListViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class ListViewController: UIViewController {
 
     @IBOutlet weak var listCollectionView: UICollectionView!
     
@@ -26,6 +26,7 @@ class ListViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.barStyle = .black
         adjustCellPadding()
         fetchUserList()
         setupLongPressGesture()
@@ -47,17 +48,19 @@ class ListViewController: UIViewController, UICollectionViewDataSource, UICollec
         self.present(alert, animated: true)
     }
     
-    
+    // MARK: Fetch User's List in Firestore
     func fetchUserList() {
         let userDB = FirestoreReferenceManager.usersDB.document(Auth.auth().currentUser!.uid)
         userDB.getDocument{ (document, error) in
             if let document = document, document.exists {
                 
                 self.userList = document.get("myList") as! [String:[String]]
-                var temporaryNameList:[String] = []
+                var temporaryNameList:[String] = ["Favorite"]
                 
                 for list in self.userList {
-                    temporaryNameList.append(list.key)
+                    if list.key != "Favorite" {
+                        temporaryNameList.append(list.key)
+                    }
                 }
                 self.nameList = temporaryNameList
 
@@ -67,6 +70,7 @@ class ListViewController: UIViewController, UICollectionViewDataSource, UICollec
         }
     }
     
+    // MARK: Update Users's List and Update in Firestore
     func updateList(for type:String, newList: String, currentList: String) {
         let userDB = FirestoreReferenceManager.usersDB.document(userID!)
         switch type {
@@ -92,6 +96,15 @@ class ListViewController: UIViewController, UICollectionViewDataSource, UICollec
         }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToSelectedList" {
+            let destinationVC = segue.destination as! SelectedListViewController
+            destinationVC.listName = selectedList
+        }
+    }
+}
+// MARK: CollectionView
+extension ListViewController: UICollectionViewDataSource, UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return nameList.count
     }
@@ -114,24 +127,16 @@ class ListViewController: UIViewController, UICollectionViewDataSource, UICollec
         selectedList = nameList[indexPath.row]
         segueWithoutSender(destination: "goToSelectedList")
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goToSelectedList" {
-            let destinationVC = segue.destination as! SelectedListViewController
-            destinationVC.listName = selectedList
-        }
-    }
 }
 
 extension ListViewController:UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
+    // MARK: AdjustCollectionViewCell
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
         let padding: CGFloat = 25
         let collectionViewSize = collectionView.frame.size.width - padding
         
         return CGSize(width: collectionViewSize, height: collectionView.frame.size.height/8)
     }
-    
     
     func adjustCellPadding() {
         let layout = self.listCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
@@ -139,6 +144,7 @@ extension ListViewController:UICollectionViewDelegateFlowLayout, UIGestureRecogn
         layout.minimumInteritemSpacing = 5
     }
     
+    // MARK: LongPressGesture
     func setupLongPressGesture() {
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(ListViewController.handleLongPressGesture(gestureRecognizer:)))
         longPressGesture.minimumPressDuration = 1
@@ -181,6 +187,7 @@ extension ListViewController:UICollectionViewDelegateFlowLayout, UIGestureRecogn
         
     }
     
+    // MARK: ActionSheet And Alert
     func displayAdjustCellActionSheet(list:String) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Rename", style: .default){ action in

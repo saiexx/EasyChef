@@ -20,6 +20,9 @@ class RegisterViewController: UIViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var repasswordTextField: UITextField!
     
+    override var prefersStatusBarHidden: Bool{
+        return true
+    }
     
     @IBAction func registerButtonPressed(_ sender: Any) {
         guard let name = nameTextField.text,
@@ -62,7 +65,8 @@ class RegisterViewController: UIViewController {
                 return
             }
             self.setDisplayName(name: name)
-            self.createDB(uid: self.firebaseAuth.currentUser!.uid)
+            let user = self.firebaseAuth.currentUser!
+            self.createDB(uid: user.uid, email: email, name: name, imgUrl: "")
             self.view.window!.rootViewController?.dismiss(animated: false, completion: nil)
             
         }
@@ -79,12 +83,15 @@ class RegisterViewController: UIViewController {
         }
     }
     
-    func createDB(uid:String) {
+    func createDB(uid:String, email:String, name:String, imgUrl:String) {
         FirestoreReferenceManager.usersDB.document(uid).setData([
             "style": "",
             "about": "",
             "myList": ["Favorite":[]],
-            "ownedMenu" : []
+            "ownedMenu" : [],
+            "email": email,
+            "name": name,
+            "imageUrl": imgUrl
         ]) { error in
             if let error = error {
                 print(error.localizedDescription)

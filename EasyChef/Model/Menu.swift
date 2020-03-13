@@ -10,31 +10,63 @@ import Foundation
 
 class Menu {
     var name: String?
+    var foodId: String?
     var ownerName: String?
+    var ownerId: String?
     var imageUrl: URL?
     var estimatedTime: Int?
-    var rating: Double?
+    var averageRating: Double?
+    var numberOfUserRated: Int?
     var served: String?
-    var ingredients: [Int:[String:String]] = [:]
-    var method: [Int:String] = [:]
+    var ingredients: [String:[String:String]] = [:]
+    var method: [String:String] = [:]
+    var createdTime: Double?
     
-    init(fromDisplayMenuList name:String, ownerName:String, imageUrl:URL, rating:Double, served:String, estimatedTime:Int) {
+    init(forList name:String, id:String, ownerName:String, imageUrl:String, estimatedTime:Int, rating:[String:Int], served:String, createdTime:Double) {
         self.name = name
+        self.foodId = id
         self.ownerName = ownerName
-        self.imageUrl = imageUrl
-        self.rating = rating
-        self.served = served
         self.estimatedTime = estimatedTime
+        self.served = served
+        self.createdTime = createdTime
+        
+        let stringImageUrl = imageUrl
+        
+        self.imageUrl = URL(string: stringImageUrl)
+        
+        let rating = rating
+        let sumRating:Int = rating["sumRating"]!
+        
+        self.numberOfUserRated = rating["amount"]!
+        if self.numberOfUserRated == 0 {
+            self.averageRating = 0
+        } else {
+            self.averageRating = Double(sumRating) / Double(self.numberOfUserRated!)
+        }
     }
     
-    init(displayMenuDescription name:String, ownerName:String, imageUrl:URL, rating:Double, served:String, estimatedTime:Int, ingredients: [Int:[String:String]], method: [Int:String]) {
+    init(forView name:String, id:String, ownerName:String, imageUrl:String, estimatedTime:Int, rating:[String:Int], served:String, createdTime:Double, ingredients:[String:[String:String]], method:[String:String]) {
         self.name = name
+        self.foodId = id
         self.ownerName = ownerName
-        self.imageUrl = imageUrl
-        self.rating = rating
-        self.served = served
         self.estimatedTime = estimatedTime
-        self.method = method
+        self.served = served
+        self.createdTime = createdTime
         self.ingredients = ingredients
+        self.method = method
+        
+        let stringImageUrl = imageUrl
+        
+        self.imageUrl = URL(string: stringImageUrl)
+        
+        let rating = rating
+        let sumRating:Int = rating["sumRating"]!
+        
+        self.numberOfUserRated = rating["amount"]!
+        if self.numberOfUserRated == 0 {
+            self.averageRating = 0
+        } else {
+            self.averageRating = Double(sumRating) / Double(self.numberOfUserRated!)
+        }
     }
 }

@@ -10,9 +10,18 @@ import UIKit
 import Firebase
 
 class WelcomeViewController: UIViewController {
-
+    
+    override var prefersStatusBarHidden: Bool{
+        return true
+    }
+    
+    @IBOutlet weak var getStartedButton: UIButton!
+    @IBOutlet weak var loginButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        adjustButton(button: getStartedButton)
+        adjustButton(button: loginButton)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -40,6 +49,12 @@ class WelcomeViewController: UIViewController {
             segueWithoutSender(destination: "goToMainScreen")
             print("Logged")
         }
+    }
+    
+    func adjustButton(button:UIButton) {
+        button.layer.cornerRadius = 5
+        button.layer.borderColor = UIColor.lightGray.cgColor
+        button.layer.borderWidth = 0.5
     }
 
 }

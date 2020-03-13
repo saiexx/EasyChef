@@ -34,6 +34,8 @@ extension UIViewController {
     func configureRoundProfileImage(imageView: UIImageView) {
         imageView.layer.cornerRadius = imageView.frame.size.width / 2;
         imageView.clipsToBounds = true
+        imageView.layer.borderWidth = 0.5
+        imageView.layer.borderColor = UIColor.lightGray.cgColor
     }
     
     func checkLoginStatatus() -> Bool{

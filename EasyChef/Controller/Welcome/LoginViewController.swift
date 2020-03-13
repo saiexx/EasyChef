@@ -14,11 +14,14 @@ import Firebase
 
 class LoginViewController: UIViewController {
     
-    
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     
     let firebaseAuth = Auth.auth()
+    
+    override var prefersStatusBarHidden: Bool{
+        return true
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,14 +92,15 @@ class LoginViewController: UIViewController {
                     print(error)
                     return
                 }
-                self.createDB(uid: self.firebaseAuth.currentUser!.uid)
+                let user = self.firebaseAuth.currentUser!
+                self.createDB(uid: user.uid, email: user.email!, name: user.displayName!, imgUrl: user.photoURL!.absoluteString)
                 print("Facebook Login Successful")
             }
         }
     }
 
     
-    func createDB(uid:String) {
+    func createDB(uid:String, email:String, name:String, imgUrl:String) {
         
         let userDB = FirestoreReferenceManager.usersDB.document(uid)
         
@@ -108,7 +112,10 @@ class LoginViewController: UIViewController {
                     "style": "",
                     "about": "",
                     "myList": ["Favorite":[]],
-                    "ownedMenu" : []
+                    "ownedMenu": [],
+                    "email": email,
+                    "name": name,
+                    "imageUrl": imgUrl
                 ])
                 { error in
                     if let error = error {
@@ -121,7 +128,6 @@ class LoginViewController: UIViewController {
             }
             self.goBackWelcomeIfAuthSuccess()
         }
-
     }
     
     func adjustImageSize() {
