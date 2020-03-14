@@ -153,7 +153,7 @@ extension ListViewController:UICollectionViewDelegateFlowLayout, UIGestureRecogn
         self.listCollectionView.addGestureRecognizer(longPressGesture)
     }
     
-    @objc func handleLongPressGesture(gestureRecognizer: UILongPressGestureRecognizer){
+    @objc func handleLongPressGesture(gestureRecognizer: UILongPressGestureRecognizer) {
 
         let press = gestureRecognizer.location(in: listCollectionView)
         let indexPath = listCollectionView.indexPathForItem(at: press)

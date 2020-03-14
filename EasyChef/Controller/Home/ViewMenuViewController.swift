@@ -11,11 +11,16 @@ import Firebase
 
 class ViewMenuViewController: UIViewController {
     
+    @IBOutlet weak var menuTableView: UITableView!
+    
     var foodId:String?
     
     var currentMenu: Menu!
     
-    @IBOutlet weak var menuTableView: UITableView!
+    let user = Auth.auth().currentUser
+    
+    var userList:[String] = []
+    var userListDict:[String:[String]] = [:]
     
     let tableHeaderViewHeight: CGFloat = UIScreen.main.bounds.height / 4
     
@@ -27,6 +32,10 @@ class ViewMenuViewController: UIViewController {
         setupTableView()
         fetchMenu()
         setupHeaderView()
+    }
+    
+    @IBAction func addToListButtonPressed(_ sender: Any) {
+        fetchUserList()
     }
     
     func setupTableView() {
@@ -62,9 +71,30 @@ class ViewMenuViewController: UIViewController {
             self.currentMenu = Menu(forView: name, id: self.foodId!, ownerName: ownerName, imageUrl: imageUrlString, estimatedTime: estimatedTime, rating: rating, served: served, createdTime: createdTime, ingredients: ingredients, method: method)
             self.menuTableView.reloadData()
             self.headerView.foodImageView.kf.setImage(with: self.currentMenu?.imageUrl)
+            
+            print("Fetch Menu Success")
         }
     }
     
+    func fetchUserList() {
+        let userDB = FirestoreReferenceManager.usersDB.document(user!.uid)
+        userDB.getDocument { (document, error) in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            let data = document!.data()
+            let list = data!["myList"]! as! [String:[String]]
+            var tempList:[String] = []
+            self.userListDict = list
+            for key in list.keys { tempList.append(key) }
+            self.userList = tempList.sorted()
+            self.showActionSheet()
+            print("Fetch User List Success")
+        }
+    }
+    
+    //setup for stretchy header
     func setupHeaderView() {
         headerView = menuTableView.tableHeaderView as? MenuHeaderView
         
@@ -82,6 +112,7 @@ class ViewMenuViewController: UIViewController {
         updateHeaderView()
     }
     
+    //update header when scrolling down
     func updateHeaderView() {
         let effectiveHeight = tableHeaderViewHeight
         var headerRect = CGRect(x: 0, y: -effectiveHeight, width: menuTableView.bounds.width, height: tableHeaderViewHeight)
@@ -94,6 +125,7 @@ class ViewMenuViewController: UIViewController {
         headerView.frame = headerRect
     }
     
+    //generate rating star based on rating score
     func setRatingStar(averageRating: Double?, starImage:[UIImageView]) {
         let filledStar = #imageLiteral(resourceName: "filled-star")
         let blankStar = #imageLiteral(resourceName: "blank-star")
@@ -196,5 +228,49 @@ extension ViewMenuViewController: UITableViewDataSource, UITableViewDelegate {
 extension ViewMenuViewController {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateHeaderView()
+    }
+}
+
+extension ViewMenuViewController {
+    func showActionSheet() {
+        let alert = UIAlertController(title: nil, message: "Select your list", preferredStyle: .actionSheet)
+        
+        for name in userList {
+            alert.addAction(UIAlertAction(title: name, style: .default) { action in self.addToList(selectedList: name)})
+        }
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        self.present(alert, animated: true)
+    }
+    
+    func showExistingMenuAlert(name:String, selectedList:String) {
+        let alert = UIAlertController(title: "You already have \(name) in \(selectedList).", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+        self.present(alert, animated: true)
+    }
+    
+    func addToList(selectedList:String) {
+        print(selectedList)
+        var newList = userListDict[selectedList]
+        if (newList?.contains(foodId!))! {
+            showExistingMenuAlert(name: currentMenu.name!, selectedList: selectedList)
+            return
+        }
+        newList?.append(foodId!)
+        userListDict.updateValue(newList!, forKey: selectedList)
+        print(userListDict)
+        
+        let userDB = FirestoreReferenceManager.usersDB.document(user!.uid)
+        
+        userDB.updateData([
+            "myList": userListDict
+        ]) { error in
+            if let error = error {
+                print("Error updating document: \(error)")
+            } else {
+                print("Document Successfully Updated")
+            }
+        }
     }
 }

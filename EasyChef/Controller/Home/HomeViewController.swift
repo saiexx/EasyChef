@@ -101,7 +101,7 @@ extension HomeViewController:UICollectionViewDataSource, UICollectionViewDelegat
 }
 
 extension HomeViewController:UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let padding: CGFloat = 25
         let collectionViewSize = collectionView.frame.size.width - padding
