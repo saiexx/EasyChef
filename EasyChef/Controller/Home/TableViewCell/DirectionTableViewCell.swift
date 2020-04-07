@@ -9,7 +9,6 @@
 import UIKit
 
 class DirectionTableViewCell: UITableViewCell {
-
     
     @IBOutlet weak var directionLabel: UILabel!
     

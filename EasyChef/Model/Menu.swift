@@ -16,6 +16,7 @@ class Menu {
     var imageUrl: URL?
     var estimatedTime: Int?
     var averageRating: Double?
+    var sumRating: Int?
     var numberOfUserRated: Int?
     var served: String?
     var ingredients: [String:[String:String]] = [:]
@@ -35,13 +36,14 @@ class Menu {
         self.imageUrl = URL(string: stringImageUrl)
         
         let rating = rating
-        let sumRating:Int = rating["sumRating"]!
+        
+        self.sumRating = rating["sumRating"]!
         
         self.numberOfUserRated = rating["amount"]!
         if self.numberOfUserRated == 0 {
             self.averageRating = 0
         } else {
-            self.averageRating = Double(sumRating) / Double(self.numberOfUserRated!)
+            self.averageRating = Double(self.sumRating!) / Double(self.numberOfUserRated!)
         }
     }
     
@@ -60,13 +62,14 @@ class Menu {
         self.imageUrl = URL(string: stringImageUrl)
         
         let rating = rating
-        let sumRating:Int = rating["sumRating"]!
+        
+        self.sumRating = rating["sumRating"]!
         
         self.numberOfUserRated = rating["amount"]!
         if self.numberOfUserRated == 0 {
             self.averageRating = 0
         } else {
-            self.averageRating = Double(sumRating) / Double(self.numberOfUserRated!)
+            self.averageRating = Double(self.sumRating!) / Double(self.numberOfUserRated!)
         }
     }
 }

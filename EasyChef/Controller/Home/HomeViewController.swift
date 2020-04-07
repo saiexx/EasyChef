@@ -20,20 +20,26 @@ class HomeViewController: UIViewController{
     
     var selectedMenu:String?
     
+    lazy var refresher:UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(fetchMenu), for: .valueChanged)
+        return refreshControl
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.barStyle = .black
         addNavBarImage(viewController: self)
-        
+        fetchMenu()
         self.menuCollectionView.dataSource = self
         self.menuCollectionView.delegate = self
-        
         adjustCellPadding()
         
-        fetchMenu()
+        menuCollectionView.refreshControl = refresher
     }
     
-    func fetchMenu() {
+    @objc func fetchMenu() {
+        menuData = []
         db.order(by: "createdTime", descending: true).getDocuments() { (query, error) in
             if let error = error {
                 print("Something went wrong \(error)")
@@ -55,11 +61,17 @@ class HomeViewController: UIViewController{
                     
                     self.menuData.append(menuStruct)
                     self.menuCollectionView.reloadData()
+                    self.endRefresher()
                 }
             }
         }
     }
-    
+    func endRefresher() {
+        let deadline = DispatchTime.now() + .milliseconds(500)
+        DispatchQueue.main.asyncAfter(deadline: deadline) {
+            self.refresher.endRefreshing()
+        }
+    }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToViewMenuScreen" {
             let destination = segue.destination as! ViewMenuViewController

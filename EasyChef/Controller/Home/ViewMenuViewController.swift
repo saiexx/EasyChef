@@ -22,16 +22,26 @@ class ViewMenuViewController: UIViewController {
     var userList:[String] = []
     var userListDict:[String:[String]] = [:]
     
+    var commentData:[Comment] = []
+    var userCommentList:[String] = []
+    
     let tableHeaderViewHeight: CGFloat = UIScreen.main.bounds.height / 4
     
     var headerView: MenuHeaderView!
     var headerMaskLayer: CAShapeLayer!
     
+    var reviewButtonStatus:Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        fetchMenu()
         setupHeaderView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        fetchMenu()
+        fetchComment()
     }
     
     @IBAction func addToListButtonPressed(_ sender: Any) {
@@ -94,6 +104,45 @@ class ViewMenuViewController: UIViewController {
         }
     }
     
+    //fetch comment db
+    func fetchComment() {
+        commentData = []
+        userCommentList = []
+        let commentDB = FirestoreReferenceManager.menusDB.document(foodId!).collection("review")
+        commentDB.order(by: "time", descending: true).getDocuments { (query, error) in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            for document in query!.documents {
+                let comment = document.data()
+                
+                let name = comment["name"] as! String
+                let commentId = document.documentID
+                let imageUrl = comment["imageUrl"] as! String
+                let score = comment["rating"] as! Int
+                let commentText = comment["comment"] as! String
+                let createdTimeTimestamp = comment["time"] as! Timestamp
+                let createdTime = TimeInterval(createdTimeTimestamp.seconds)
+                let ownerId = comment["ownerId"] as! String
+                
+                let commentClass = Comment(name: name, commentId: commentId, imageUrl: imageUrl, createdTime: createdTime, commentText: commentText, score: score, ownerId: ownerId)
+                
+                self.userCommentList.append(ownerId)
+                
+                self.commentData.append(commentClass)
+                self.checkUserCommentStatus()
+                self.menuTableView.reloadData()
+            }
+        }
+    }
+    
+    func checkUserCommentStatus() {
+        if userCommentList.contains(user!.uid) {
+            reviewButtonStatus = true
+        }
+    }
+    
     //setup for stretchy header
     func setupHeaderView() {
         headerView = menuTableView.tableHeaderView as? MenuHeaderView
@@ -153,7 +202,7 @@ extension ViewMenuViewController: UITableViewDataSource, UITableViewDelegate {
         if currentMenu == nil {
             return 0
         } else {
-            return 3
+            return 4 + commentData.count
         }
     }
     
@@ -220,8 +269,55 @@ extension ViewMenuViewController: UITableViewDataSource, UITableViewDelegate {
             cell.directionLabel.numberOfLines = 0
             
             return cell
+        } else if indexPath.row == 3 {
+            
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ReviewButtonCell", for: indexPath) as! ReviewButtonTableViewCell
+            
+            let amount = commentData.count
+            if amount <= 1 {
+                cell.amountLabel.text = "\(amount) Review"
+            } else {
+                cell.amountLabel.text = "\(amount) Reviews"
+            }
+            
+            cell.reviewButton.layer.cornerRadius = 5
+            
+            if reviewButtonStatus {
+                cell.reviewButton.isEnabled = false
+            }
+            
+            cell.delegate = self
+            
+            return cell
+            
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "CommentsCell", for: indexPath) as! CommentsTableViewCell
+            
+            let index = indexPath.row - 4
+            
+            cell.nameLabel.text = commentData[index].name!
+            cell.commentLabel.text = commentData[index].commentText!
+            
+            let date = Date(timeIntervalSince1970: commentData[index].createdTime!)
+            cell.timeLabel.text = date.timeAgoDisplay()
+            
+            setRatingStar(averageRating: Double(commentData[index].score!), starImage: cell.starImageView)
+            
+            return cell
         }
-        return UITableViewCell()
+    }
+}
+
+extension ViewMenuViewController: ReviewButtonTableViewCellDelegate {
+    func ReviewButtonPressed() {
+        segueWithoutSender(destination: "goToReviewScreen")
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToReviewScreen" {
+            let destination = segue.destination as! ReviewViewController
+            destination.food = currentMenu
+        }
     }
 }
 
