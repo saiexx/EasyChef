@@ -15,7 +15,6 @@ class FoodDescriptionTableViewCell: UITableViewCell {
     @IBOutlet weak var estimatedTimeLabel: UILabel!
     @IBOutlet weak var servedLabel: UILabel!
     @IBOutlet weak var profileButton: UIButton!
-    @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet var starImageView: [UIImageView]!
     
 }

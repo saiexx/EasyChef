@@ -32,6 +32,10 @@ class ViewMenuViewController: UIViewController {
     
     var reviewButtonStatus:Bool = false
     
+    var ownerStatus:Bool = false
+    
+    @IBOutlet weak var barButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
@@ -44,8 +48,12 @@ class ViewMenuViewController: UIViewController {
         fetchComment()
     }
     
-    @IBAction func addToListButtonPressed(_ sender: Any) {
-        fetchUserList()
+    @IBAction func rightButtonPressed(_ sender: Any) {
+        if ownerStatus {
+            showConfigMenuActionSheet()
+        } else {
+            fetchUserList()
+        }
     }
     
     func setupTableView() {
@@ -78,10 +86,12 @@ class ViewMenuViewController: UIViewController {
             let createdTime = TimeInterval(createdTimeTimestamp.seconds)
             let ingredients = menu["ingredients"] as! [String:[String:String]]
             let method = menu["method"] as! [String:String]
-            self.currentMenu = Menu(forView: name, id: self.foodId!, ownerName: ownerName, imageUrl: imageUrlString, estimatedTime: estimatedTime, rating: rating, served: served, createdTime: createdTime, ingredients: ingredients, method: method)
+            let ownerId = menu["ownerId"] as! String
+            self.currentMenu = Menu(forView: name, id: self.foodId!, ownerName: ownerName, imageUrl: imageUrlString, estimatedTime: estimatedTime, rating: rating, served: served, createdTime: createdTime, ingredients: ingredients, method: method, ownerId: ownerId)
             self.menuTableView.reloadData()
             self.headerView.foodImageView.kf.setImage(with: self.currentMenu?.imageUrl)
             
+            self.checkOwnerStatus()
             print("Fetch Menu Success")
         }
     }
@@ -134,6 +144,18 @@ class ViewMenuViewController: UIViewController {
                 self.checkUserCommentStatus()
                 self.menuTableView.reloadData()
             }
+        }
+    }
+    
+    func checkOwnerStatus() {
+        if currentMenu.ownerId == user!.uid {
+            ownerStatus = true
+            print("owner")
+            barButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+        } else {
+            ownerStatus = false
+            barButton.setImage(UIImage(systemName: "plus"), for: .normal)
+            print("not owner")
         }
     }
     
@@ -197,6 +219,7 @@ class ViewMenuViewController: UIViewController {
     }
 }
 
+//MARK: TABLEVIEW
 extension ViewMenuViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if currentMenu == nil {
@@ -216,7 +239,7 @@ extension ViewMenuViewController: UITableViewDataSource, UITableViewDelegate {
             cell.ratingLabel.text = String(format:"%.1f(\(currentMenu!.numberOfUserRated!))", currentMenu!.averageRating!)
             cell.estimatedTimeLabel.text = "\(currentMenu!.estimatedTime!) minutes"
             cell.servedLabel.text = currentMenu!.served!
-            configureRoundProfileImage(imageView: cell.profileImage)
+
             cell.profileButton.setTitle(currentMenu!.ownerName!, for: .normal)
             
             return cell
@@ -282,7 +305,7 @@ extension ViewMenuViewController: UITableViewDataSource, UITableViewDelegate {
             
             cell.reviewButton.layer.cornerRadius = 5
             
-            if reviewButtonStatus {
+            if reviewButtonStatus || ownerStatus {
                 cell.reviewButton.isEnabled = false
             }
             
@@ -317,6 +340,10 @@ extension ViewMenuViewController: ReviewButtonTableViewCellDelegate {
         if segue.identifier == "goToReviewScreen" {
             let destination = segue.destination as! ReviewViewController
             destination.food = currentMenu
+        } else if segue.identifier == "goToEdit" {
+            let destination = segue.destination as! CreateMenuViewController
+            destination.currentMenu = currentMenu
+            destination.editStatus = true
         }
     }
 }
@@ -327,7 +354,25 @@ extension ViewMenuViewController {
     }
 }
 
+// MARK: ALERT
 extension ViewMenuViewController {
+    func showConfigMenuActionSheet() {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: "Edit", style: .default) { action in self.segueWithoutSender(destination: "goToEdit")})
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { action in self.showDeleteAlert() })
+        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+        
+        self.present(alert, animated: true)
+    }
+    
+    func showDeleteAlert() {
+        let alert = UIAlertController(title: nil, message: "Delete this menu?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Delete", style: .default) { action in self.deleteMenu() })
+        
+        self.present(alert, animated: true)
+    }
     func showActionSheet() {
         let alert = UIAlertController(title: nil, message: "Select your list", preferredStyle: .actionSheet)
         
@@ -366,6 +411,18 @@ extension ViewMenuViewController {
                 print("Error updating document: \(error)")
             } else {
                 print("Document Successfully Updated")
+            }
+        }
+    }
+    
+    func deleteMenu() {
+        let foodDB = FirestoreReferenceManager.menusDB.document(foodId!)
+        foodDB.delete { (error) in
+            if let error = error {
+                print("Error removing document: \(error)")
+            } else {
+                print("Menu successfully removed")
+                _ = self.navigationController?.popViewController(animated: true)
             }
         }
     }

@@ -27,18 +27,16 @@ class ListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.barStyle = .black
+        if !checkLoginStatatus() {
+            self.dismiss(animated: true, completion: nil)
+            return
+        }
         adjustCellPadding()
         fetchUserList()
         setupLongPressGesture()
         self.listCollectionView.dataSource = self
         self.listCollectionView.delegate = self
         listCollectionView.alwaysBounceVertical = true
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        if !checkLoginStatatus() {
-            self.dismiss(animated: true, completion: nil)
-        }
     }
     
     @IBAction func addButtonPressed(_ sender: Any) {
@@ -112,7 +110,12 @@ extension ListViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "List", for: indexPath) as! ListCollectionViewCell
         
-        cell.listLabel.text = nameList[indexPath.row % 5]
+        if nameList[indexPath.row] == "Favorite" {
+            cell.iconImageView.image = UIImage(named: "icon-heart")
+        } else {
+            cell.iconImageView.image = UIImage(named: "icon-userList")
+        }
+        cell.listLabel.text = nameList[indexPath.row]
         
         cell.layer.borderColor = UIColor.lightGray.cgColor
         cell.layer.borderWidth = 0.5

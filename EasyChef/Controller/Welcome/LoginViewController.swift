@@ -16,6 +16,9 @@ class LoginViewController: UIViewController {
     
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var errorLabel: UILabel!
+    
+    @IBOutlet var button: [UIButton]!
     
     let firebaseAuth = Auth.auth()
     
@@ -28,15 +31,28 @@ class LoginViewController: UIViewController {
         if AccessToken.current != nil {
             print("Facebook still logged in")
         }
+        errorLabel.isHidden = true
+        
+        for button in button {
+            button.layer.cornerRadius = 5
+        }
     }
     
     @IBAction func loginButtonPressed(_ sender: Any) {
-        
+        errorLabel.isHidden = true
         guard let userEmail = emailTextField.text, let userPassword = passwordTextField.text else {
             print("email/password is nil")
             return
         }
-        emailLogin(userEmail: userEmail, userPassword: userPassword)
+        if userEmail == "" || userPassword == "" {
+            errorLabel.isHidden = false
+            errorLabel.text = "Please fill in email and password."
+        } else if !userEmail.isEmailFormat() {
+            errorLabel.isHidden = false
+            errorLabel.text = "Wrong formatted email."
+        } else {
+            emailLogin(userEmail: userEmail, userPassword: userPassword)
+        }
     }
     
     @IBAction func facebookLoginButtonPressed(_ sender: Any) {
@@ -54,7 +70,9 @@ class LoginViewController: UIViewController {
     func emailLogin(userEmail:String, userPassword:String) {
         firebaseAuth.signIn(withEmail: userEmail, password: userPassword) { (user, error) in
             if let error = error {
-                print(error)
+                print(error.localizedDescription)
+                self.errorLabel.isHidden = false
+                self.errorLabel.text = ("Your email or password was incorrect. Please try again.")
                 return
             }
             self.goBackWelcomeIfAuthSuccess()
@@ -89,7 +107,7 @@ class LoginViewController: UIViewController {
 
             firebaseAuth.signIn(with: credential) {(authResult, error) in
                 if let error = error {
-                    print(error)
+                    print(error.localizedDescription)
                     return
                 }
                 let user = self.firebaseAuth.currentUser!

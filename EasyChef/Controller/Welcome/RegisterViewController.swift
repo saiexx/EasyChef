@@ -19,10 +19,57 @@ class RegisterViewController: UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var repasswordTextField: UITextField!
+    @IBOutlet weak var loginButton: UIButton!
+    
+    @IBOutlet var errorLabel: [UILabel]!
     
     override var prefersStatusBarHidden: Bool{
         return true
     }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        loginButton.layer.cornerRadius = 5
+        
+        for label in errorLabel {
+            label.isHidden = true
+        }
+    }
+    
+    @IBAction func textFieldDidEndOnExit(_ sender: UITextField) {
+        
+    }
+    
+    @IBAction func textFieldDidEditingChanged(_ sender: UITextField) {
+        switch sender.tag {
+        case 0:
+            break
+        case 1:
+            if !(sender.text?.isEmailFormat())! {
+                errorLabel[1].isHidden = false
+                errorLabel[1].text = "Invalid email format."
+            } else {
+                errorLabel[1].isHidden = true
+            }
+        case 2:
+            if sender.text!.count < 6 {
+                errorLabel[2].isHidden = false
+                errorLabel[2].text = "Password must longer than 6 characters."
+            } else {
+                errorLabel[2].isHidden = true
+            }
+        case 3:
+            if sender.text! != passwordTextField.text {
+                errorLabel[3].isHidden = false
+                errorLabel[3].text = "Confirm password must match with password."
+            } else {
+                errorLabel[3].isHidden = true
+            }
+        default:
+            break
+        }
+    }
+    
     
     @IBAction func registerButtonPressed(_ sender: Any) {
         guard let name = nameTextField.text,
@@ -100,6 +147,4 @@ class RegisterViewController: UIViewController {
             print("create database success")
         }
     }
-    
-
 }

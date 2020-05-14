@@ -16,5 +16,7 @@ class MenuCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var servedLabel: UILabel!
     @IBOutlet weak var ownerLabel: UILabel!
+    @IBOutlet weak var substituteView: UIView!
+    @IBOutlet weak var substituteLabel: UILabel!
     
 }

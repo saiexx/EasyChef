@@ -99,7 +99,7 @@ class EditProfileViewController: UIViewController {
                 if let error = error {
                     print("Error updating document: \(error)")
                 } else {
-                    print("Document Successfully updated")
+                    print("Document successfully updated")
                    _ = self.navigationController?.popViewController(animated: true)
                 }
             }
@@ -156,7 +156,6 @@ class EditProfileViewController: UIViewController {
             }
         }
     }
-    
     
 }
 

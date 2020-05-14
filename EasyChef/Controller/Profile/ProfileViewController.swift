@@ -29,14 +29,17 @@ class ProfileViewController: UIViewController {
     var image:URL?
     var about:String?
     var style:String?
-    var numberOfOwnedMenu:Int?
-    var numberOfContent = 6
+    var menuData:[Menu] = []
+    
+    var selectedMenu:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.barStyle = .black
-        //configureRoundProfileImage(imageView: profileImageView)
-        showUserProfile()
+        if !checkLoginStatatus() {
+            self.dismiss(animated: true, completion: nil)
+            return
+        }
         profileTableView.dataSource = self
         profileTableView.delegate = self
         profileTableView.rowHeight = UITableView.automaticDimension
@@ -45,14 +48,6 @@ class ProfileViewController: UIViewController {
         self.navigationItem.title = user?.displayName ?? "User"
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if !checkLoginStatatus() {
-            self.dismiss(animated: true, completion: nil)
-            return
-        }
-        self.navigationItem.title = user?.displayName ?? "User"
-    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -66,6 +61,7 @@ class ProfileViewController: UIViewController {
     @IBAction func createMenuButtonPressed(_ sender: Any) {
         segueWithoutSender(destination: "goToCreateMenu")
     }
+    
     func showUserProfile() {
         let userDB = FirestoreReferenceManager.usersDB.document(user!.uid)
         
@@ -73,12 +69,7 @@ class ProfileViewController: UIViewController {
             if let document = document, document.exists {
                 self.about = (document.get("about") as! String)
                 self.style = (document.get("style") as! String)
-                
-                let ownedMenu:[String] = document.get("ownedMenu") as! [String]
-                
-                self.numberOfOwnedMenu = ownedMenu.count
-                
-                self.profileTableView.reloadData()
+                self.showOwnedMenu()
             }
         }
         if let imageUrl = user?.photoURL {
@@ -86,6 +77,38 @@ class ProfileViewController: UIViewController {
         }
         name = user?.displayName
         email = user?.email
+        profileTableView.reloadData()
+    }
+    
+    func showOwnedMenu() {
+        let menuDB = FirestoreReferenceManager.menusDB
+        menuData = []
+        menuDB.order(by: "createdTime", descending: true)
+            .whereField("ownerId", isEqualTo: user!.uid)
+            .getDocuments() { (query, error) in
+            if let error = error {
+                print("Something went wrong \(error)")
+            } else {
+                for document in query!.documents {
+                    let menu = document.data()
+                
+                    let name = menu["name"] as! String
+                    let foodId = document.documentID
+                    let ownerName = menu["ownerName"] as! String
+                    let imageUrlString = menu["imageUrl"] as! String
+                    let estimatedTime = menu["estimatedTime"] as! Int
+                    let rating = menu["rating"] as! [String:Int]
+                    let served = menu["served"] as! String
+                    let createdTimeTimestamp = menu["createdTime"] as! Timestamp
+                    let createdTime = TimeInterval(createdTimeTimestamp.seconds)
+                
+                    let menuStruct = Menu(forList: name, id: foodId, ownerName: ownerName, imageUrl: imageUrlString, estimatedTime: estimatedTime, rating: rating, served: served, createdTime: createdTime)
+                    print(name)
+                    self.menuData.append(menuStruct)
+                    self.profileTableView.reloadData()
+                }
+            }
+        }
     }
     
     func logOut() {
@@ -111,6 +134,12 @@ class ProfileViewController: UIViewController {
         loginManager.logOut()
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToViewMenuScreen" {
+            let destination = segue.destination as! ViewMenuViewController
+            destination.foodId = selectedMenu
+        }
+    }
 }
 extension ProfileViewController: HeaderTableViewCellDelegate {
     func profileButtonPressed() {
@@ -132,7 +161,12 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             cell.emailLabel.text = email
             cell.profileButton.layer.cornerRadius = 5
             configureRoundProfileImage(imageView: cell.profileImageView)
-            cell.profileImageView.kf.setImage(with: image)
+            
+            if image == nil {
+                cell.profileImageView.image = UIImage(named: "default-profile-picture")
+            } else {
+                cell.profileImageView.kf.setImage(with: image)
+            }
             
             cell.delegate = self
             
@@ -156,10 +190,10 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         } else if indexPath.row == 2 {
             let cell = tableView.dequeueReusableCell(withIdentifier: Storyboard.ownedMenu, for: indexPath) as! OwnedMenuTableViewCell
             
-            if numberOfOwnedMenu ?? 0 > 1 {
-                cell.ownedMenuLabel.text = "\(numberOfOwnedMenu!) Menus"
+            if menuData.count > 1 {
+                cell.ownedMenuLabel.text = "\(menuData.count) Menus"
             } else {
-                cell.ownedMenuLabel.text = "\(numberOfOwnedMenu ?? 0) Menu"
+                cell.ownedMenuLabel.text = "\(menuData.count) Menu"
             }
             
             cell.selectionStyle = .none
@@ -191,10 +225,10 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 3 {
-            if numberOfContent % 2 == 0 {
-                return CGFloat(210*(numberOfContent/2))
+            if menuData.count % 2 == 0 {
+                return CGFloat(210*(menuData.count/2))
             } else {
-                return CGFloat(210*((numberOfContent+1)/2))
+                return CGFloat(210*((menuData.count+1)/2))
             }
         } else {
             return UITableView.automaticDimension
@@ -204,18 +238,32 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension ProfileViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return numberOfContent
+        return menuData.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "OwnedFoodCollectionCell", for: indexPath) as! OwnedFoodCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Food", for: indexPath) as! MenuCollectionViewCell
         
         cell.layer.borderColor = UIColor.lightGray.cgColor
         cell.layer.borderWidth = 0.5
         cell.layer.cornerRadius = 10
         cell.layer.masksToBounds = true
         
+        let row = indexPath.row
+        
+        cell.foodNameLabel.text = menuData[row].name
+        cell.ownerLabel.text = menuData[row].ownerName
+        cell.ratingLabel.text = String(format:"%.1f(\(menuData[row].numberOfUserRated!))", menuData[row].averageRating!)
+        cell.servedLabel.text = menuData[row].served
+        cell.timeLabel.text = String(menuData[row].estimatedTime!) + "mins"
+        cell.foodImageView.kf.setImage(with:menuData[row].imageUrl)
+        
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        selectedMenu = menuData[indexPath.row].foodId
+        segueWithoutSender(destination: "goToViewMenuScreen")
     }
 }
 

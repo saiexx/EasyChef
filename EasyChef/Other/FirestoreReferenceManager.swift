@@ -12,4 +12,5 @@ struct FirestoreReferenceManager {
     static let db = Firestore.firestore()
     static let usersDB = db.collection("Users")
     static let menusDB = db.collection("Menus")
+    static let ingredientsDB = db.collection("Ingredients").document("Ingredients")
 }

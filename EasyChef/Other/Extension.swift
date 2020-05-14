@@ -69,3 +69,44 @@ extension Date {
         return "\(secondsAgo / week) weeks ago"
     }
 }
+
+extension UITextField {
+    func setLeftPaddingPoints(_ amount:CGFloat){
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.size.height))
+        self.leftView = paddingView
+        self.leftViewMode = .always
+    }
+    func setRightPaddingPoints(_ amount:CGFloat) {
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.size.height))
+        self.rightView = paddingView
+        self.rightViewMode = .always
+    }
+}
+
+extension String {
+    
+    func isCharacter() -> Bool {
+        return regex(pattern: ".*[^A-Za-z].*")
+    }
+    
+    func isNumeric() -> Bool {
+        return regex(pattern: ".*[^0-9].*")
+    }
+    
+    func hasSpecialCharacters() -> Bool {
+        return !regex(pattern: ".*[^A-Za-z0-9].*")
+    }
+    
+    func isEmailFormat() -> Bool {
+        return !regex(pattern: "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}")
+    }
+    
+    func regex(pattern: String) -> Bool {
+        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+        let range = NSRange(location: 0, length: self.count)
+        if regex.matches(in: self, options: [], range: range).count > 0 {
+            return false
+        }
+        return true
+    }
+}

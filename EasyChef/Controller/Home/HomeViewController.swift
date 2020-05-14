@@ -30,14 +30,16 @@ class HomeViewController: UIViewController{
         super.viewDidLoad()
         navigationController?.navigationBar.barStyle = .black
         addNavBarImage(viewController: self)
-        fetchMenu()
         self.menuCollectionView.dataSource = self
         self.menuCollectionView.delegate = self
         adjustCellPadding()
         
         menuCollectionView.refreshControl = refresher
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        fetchMenu()
+    }
     @objc func fetchMenu() {
         menuData = []
         db.order(by: "createdTime", descending: true).getDocuments() { (query, error) in
@@ -72,6 +74,7 @@ class HomeViewController: UIViewController{
             self.refresher.endRefreshing()
         }
     }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToViewMenuScreen" {
             let destination = segue.destination as! ViewMenuViewController
@@ -79,6 +82,8 @@ class HomeViewController: UIViewController{
         }
     }
 }
+
+//MARK: COLLECTIONVIEW
 
 extension HomeViewController:UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -111,7 +116,7 @@ extension HomeViewController:UICollectionViewDataSource, UICollectionViewDelegat
         segueWithoutSender(destination: "goToViewMenuScreen")
     }
 }
-
+//MARK: COLLECTIONVIEWFLOWLAYOUT
 extension HomeViewController:UICollectionViewDelegateFlowLayout {
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         

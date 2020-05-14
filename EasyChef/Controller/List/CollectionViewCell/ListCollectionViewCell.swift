@@ -11,5 +11,7 @@ import UIKit
 class ListCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var listLabel: UILabel!
+    @IBOutlet weak var iconImageView: UIImageView!
+    
     
 }

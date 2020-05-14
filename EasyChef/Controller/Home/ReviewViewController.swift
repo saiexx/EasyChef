@@ -32,6 +32,7 @@ class ReviewViewController: UIViewController {
         foodNameLabel.text = food?.name
         ownerNameLabel.text = food?.ownerName
         confirmButton.layer.cornerRadius = 5
+        commentTextView.layer.cornerRadius = 5
         setRatingStar(star: currentStar)
     }
     
