@@ -40,9 +40,6 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if !checkLoginStatatus() {
-            self.dismiss(animated: true, completion: nil)
-        }
         
         fetchSearchIngredients()
         
@@ -114,6 +111,7 @@ class SearchViewController: UIViewController {
     }
     
     func endRefresher() {
+        self.foodCollectionView.reloadData()
         let deadline = DispatchTime.now() + .milliseconds(500)
         DispatchQueue.main.asyncAfter(deadline: deadline) {
             self.refresher.endRefreshing()
@@ -228,7 +226,6 @@ extension SearchViewController {
                     let menuStruct = Menu(forSearch: name, id: foodId, ownerName: ownerName, imageUrl: imageUrlString, estimatedTime: estimatedTime, rating: rating, served: served, createdTime: createdTime, tag: tag)
                     
                     self.menuData.append(menuStruct)
-                    self.foodCollectionView.reloadData()
                 }
                 if !self.ingredientsArr.contains(chosenName) {
                     print("end of searching")
@@ -298,7 +295,6 @@ extension SearchViewController {
                             let menuStruct = Menu(forSearch: name, id: foodId, ownerName: ownerName, imageUrl: imageUrlString, estimatedTime: estimatedTime, rating: rating, served: served, createdTime: createdTime, tag: tag)
                             
                             self.menuData.append(menuStruct)
-                            self.foodCollectionView.reloadData()
                             if counter == target && self.menuData.isEmpty {
                                 print("1")
                                 self.iconImageView.image = UIImage(named: "icon-sad")
@@ -308,6 +304,7 @@ extension SearchViewController {
                                 print("check contain")
                             }
                         }
+                        self.foodCollectionView.reloadData()
                     }
                     
                 }
@@ -336,9 +333,8 @@ extension SearchViewController {
                         let menuStruct = Menu(forSearch: name, id: foodId, ownerName: ownerName, imageUrl: imageUrlString, estimatedTime: estimatedTime, rating: rating, served: served, createdTime: createdTime, tag: tag)
                         
                         self.menuData.append(menuStruct)
-                        self.foodCollectionView.reloadData()
                     }
-                    print(self.menuData)
+                    self.foodCollectionView.reloadData()
                     if self.menuData.isEmpty {
                         self.iconImageView.image = UIImage(named: "icon-sad")
                         self.statusLabel.text = "Sorry!\nwe could not find the menu\nwhich match with your ingredient."

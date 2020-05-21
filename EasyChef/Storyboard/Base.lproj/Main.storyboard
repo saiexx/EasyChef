@@ -46,7 +46,7 @@
                                             <constraint firstAttribute="width" constant="250" id="2xk-fG-bbb"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="Courier" family="Courier" pointSize="30"/>
-                                        <state key="normal" title="Log In">
+                                        <state key="normal" title="Login">
                                             <color key="titleColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                         </state>
                                         <connections>
@@ -3036,7 +3036,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="hlZ-El-gD1"/>
         <segue reference="oj3-CC-otY"/>
-        <segue reference="7nK-tE-WLI"/>
+        <segue reference="vey-vh-ylU"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
     <resources>
@@ -3057,8 +3057,8 @@
         <image name="icon-style" width="64" height="64"/>
         <image name="padthai" width="375" height="205"/>
         <image name="plate" width="50" height="50"/>
-        <image name="plus" width="64" height="64"/>
         <image name="plus" catalog="system" width="128" height="113"/>
+        <image name="plus" width="64" height="64"/>
         <image name="trash.fill" catalog="system" width="121" height="128"/>
         <image name="user" width="30" height="30"/>
         <image name="user-white" width="30" height="30"/>

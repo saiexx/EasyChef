@@ -40,6 +40,7 @@ class ViewMenuViewController: UIViewController {
         super.viewDidLoad()
         setupTableView()
         setupHeaderView()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -91,7 +92,11 @@ class ViewMenuViewController: UIViewController {
             self.menuTableView.reloadData()
             self.headerView.foodImageView.kf.setImage(with: self.currentMenu?.imageUrl)
             
-            self.checkOwnerStatus()
+            if !self.checkLoginStatatus() {
+                self.barButton.isHidden = true
+            } else {
+                self.checkOwnerStatus()
+            }
             print("Fetch Menu Success")
         }
     }
@@ -256,10 +261,18 @@ extension ViewMenuViewController: UITableViewDataSource, UITableViewDelegate {
                 let amount = ingredients["\(index)"]!["amount"]!
                 var text = ""
                 
-                if index == ingredients.count {
-                    text = "\(name) - \(amount)"
+                if amount == "" {
+                    if index == ingredients.count{
+                        text = "\(name)"
+                    } else {
+                        text = "\(name)\n\n"
+                    }
                 } else {
-                    text = "\(name) - \(amount)\n\n"
+                    if index == ingredients.count {
+                        text = "\(name) - \(amount)"
+                    } else {
+                        text = "\(name) - \(amount)\n\n"
+                    }
                 }
                 
                 ingredientsText += text
@@ -307,6 +320,11 @@ extension ViewMenuViewController: UITableViewDataSource, UITableViewDelegate {
             
             if reviewButtonStatus || ownerStatus {
                 cell.reviewButton.isEnabled = false
+            }
+            
+            if !checkLoginStatatus() {
+                cell.reviewButton.isEnabled = false
+                cell.reviewButton.setTitle("You need to login first to review this menu.", for: .normal)
             }
             
             cell.delegate = self

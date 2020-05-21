@@ -231,6 +231,7 @@ extension CreateMenuViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.nameTextField.text = ingredients["\(row)"]!["name"]
                 cell.amountTextField.text = ingredients["\(row)"]!["amount"]
             }
+            cell.selectionStyle = .none
             
             return cell
         }
@@ -243,6 +244,8 @@ extension CreateMenuViewController: UITableViewDelegate, UITableViewDataSource {
             if editStatus && row <= directions.count {
                 cell.directionTextField.text = directions["\(row)"]
             }
+            
+            cell.selectionStyle = .none
             return cell
         }
         

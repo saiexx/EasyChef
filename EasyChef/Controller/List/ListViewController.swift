@@ -28,6 +28,9 @@ class ListViewController: UIViewController {
         super.viewDidLoad()
         navigationController?.navigationBar.barStyle = .black
         if !checkLoginStatatus() {
+            if let vc = presentingViewController as? WelcomeViewController {
+                vc.didUserNotLogin = true
+            }
             self.dismiss(animated: true, completion: nil)
             return
         }

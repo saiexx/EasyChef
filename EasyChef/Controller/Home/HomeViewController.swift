@@ -62,15 +62,16 @@ class HomeViewController: UIViewController{
                     let menuStruct = Menu(forList: name, id: foodId, ownerName: ownerName, imageUrl: imageUrlString, estimatedTime: estimatedTime, rating: rating, served: served, createdTime: createdTime)
                     
                     self.menuData.append(menuStruct)
-                    self.menuCollectionView.reloadData()
-                    self.endRefresher()
                 }
+                self.endRefresher()
             }
         }
     }
+    
     func endRefresher() {
         let deadline = DispatchTime.now() + .milliseconds(500)
         DispatchQueue.main.asyncAfter(deadline: deadline) {
+            self.menuCollectionView.reloadData()
             self.refresher.endRefreshing()
         }
     }
@@ -96,12 +97,16 @@ extension HomeViewController:UICollectionViewDataSource, UICollectionViewDelegat
         
         let row = indexPath.row
         
-        cell.foodNameLabel.text = menuData[row].name
-        cell.ownerLabel.text = menuData[row].ownerName
-        cell.ratingLabel.text = String(format:"%.1f(\(menuData[row].numberOfUserRated!))", menuData[row].averageRating!)
-        cell.servedLabel.text = menuData[row].served
-        cell.timeLabel.text = String(menuData[row].estimatedTime!) + "mins"
-        cell.foodImageView.kf.setImage(with:menuData[row].imageUrl)
+        print(row)
+        
+        if menuData.count != 0 {
+            cell.foodNameLabel.text = menuData[row].name
+            cell.ownerLabel.text = menuData[row].ownerName
+            cell.ratingLabel.text = String(format:"%.1f(\(menuData[row].numberOfUserRated!))", menuData[row].averageRating!)
+            cell.servedLabel.text = menuData[row].served
+            cell.timeLabel.text = String(menuData[row].estimatedTime!) + "mins"
+            cell.foodImageView.kf.setImage(with:menuData[row].imageUrl)
+        }
         
         cell.layer.borderColor = UIColor.lightGray.cgColor
         cell.layer.borderWidth = 0.5
