@@ -35,11 +35,15 @@ class ListViewController: UIViewController {
             return
         }
         adjustCellPadding()
-        fetchUserList()
         setupLongPressGesture()
         self.listCollectionView.dataSource = self
         self.listCollectionView.delegate = self
         listCollectionView.alwaysBounceVertical = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchUserList()
     }
     
     @IBAction func addButtonPressed(_ sender: Any) {
@@ -80,7 +84,9 @@ class ListViewController: UIViewController {
         case "delete":
             userList.removeValue(forKey: newList)
         case "rename":
-            userList[newList] = userList.removeValue(forKey: currentList)
+            print(userList[currentList])
+            userList[newList] = userList[currentList]
+            userList.removeValue(forKey: currentList)
         default:
             print("Invalid Type")
             return

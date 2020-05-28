@@ -23,6 +23,12 @@ class CreateMenuViewController: UIViewController {
     
     @IBOutlet weak var titleLabel: UILabel!
     
+    @IBOutlet weak var alertNameLabel: UILabel!
+    @IBOutlet weak var alertIngredientLabel: UILabel!
+    @IBOutlet weak var alertDirectionLabel: UILabel!
+    
+    var checker:Bool = true
+    
     var numOfIngredients:Int = 3
     var numOfDirections:Int = 3
     
@@ -132,13 +138,26 @@ class CreateMenuViewController: UIViewController {
         serving = describeTextField[1].text!
         estimatedTime = Int(describeTextField[2].text!)
         
-        ingredients = getIngredients()
-        directions = getDirections()
+        alertNameLabel.isHidden = true
+        alertDirectionLabel.isHidden = true
+        alertIngredientLabel.isHidden = true
         
-        segueWithoutSender(destination: "toPreviewScreen")
+        checker = true
+        
+        if name == "" {
+            alertNameLabel.isHidden = false
+            return
+        }
+        
+        getIngredients()
+        getDirections()
+        
+        if checker {
+            segueWithoutSender(destination: "toPreviewScreen")
+        }
     }
     
-    func getIngredients() -> [String:[String:String]] {
+    func getIngredients(){
         var tempDict:[String:[String:String]] = [:]
         
         for number in 0 ..< numOfIngredients {
@@ -147,14 +166,20 @@ class CreateMenuViewController: UIViewController {
             let name = cell.nameTextField.text!
             let amount = cell.amountTextField.text!
             
+            if name == "" {
+                alertIngredientLabel.isHidden = false
+                checker = false
+                return
+            }
+            
             tempDict["\(number + 1)"] = ["name":name, "amount":amount]
             searchIngredients.append(name)
         }
         
-        return tempDict
+        ingredients = tempDict
     }
     
-    func getDirections() -> [String:String] {
+    func getDirections() {
         var tempDict:[String:String] = [:]
         
         for number in 0 ..< numOfDirections {
@@ -162,9 +187,16 @@ class CreateMenuViewController: UIViewController {
             let cell = directionsTableView.cellForRow(at: indexPath) as! AddDirectionsTableViewCell
             let name = cell.directionTextField.text!
             
+            if name == "" {
+                alertDirectionLabel.isHidden = false
+                checker = false
+                return
+            }
+            
             tempDict["\(number + 1)"] = name
         }
-        return tempDict
+        
+        directions = tempDict
     }
     
     @IBAction func CancelButtonPressed(_ sender: Any) {

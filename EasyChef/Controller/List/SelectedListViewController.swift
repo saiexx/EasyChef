@@ -26,14 +26,14 @@ class SelectedListViewController: UIViewController {
     
     @IBOutlet weak var menuCollectionView: UICollectionView!
 
-    @IBOutlet weak var moreButton: UIBarButtonItem!
+    @IBOutlet weak var statusLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.menuCollectionView.dataSource = self
         self.menuCollectionView.delegate = self
-        
+        statusLabel.isHidden = true
         adjustCellPadding()
         setupLongPressGesture()
         fetchUserList()
@@ -54,8 +54,11 @@ class SelectedListViewController: UIViewController {
             self.menuList = selectedList
             
             print("Fetch \(self.listName!) Success")
-            
             self.fetchMenu()
+            
+            if self.menuList.isEmpty {
+                self.statusLabel.isHidden = false
+            }
         }
     }
     

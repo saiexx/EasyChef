@@ -11,5 +11,6 @@ import UIKit
 class IngredientsTableViewCell: UITableViewCell {
 
     @IBOutlet weak var ingredientsLabel: UILabel!
+    @IBOutlet weak var substituteLabel: UILabel!
     
 }

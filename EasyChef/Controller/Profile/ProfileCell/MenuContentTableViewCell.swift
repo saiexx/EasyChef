@@ -10,7 +10,8 @@ import UIKit
 
 class MenuContentTableViewCell: UITableViewCell {
 
-
     @IBOutlet weak var menuCollectionView: UICollectionView!
+    @IBOutlet weak var logoImageView: UIImageView!
+    @IBOutlet weak var statusLabel: UILabel!
     
 }

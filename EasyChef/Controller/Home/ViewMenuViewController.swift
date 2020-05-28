@@ -16,6 +16,10 @@ class ViewMenuViewController: UIViewController {
     var foodId:String?
     
     var currentMenu: Menu!
+    var currentMenuTag:Bool = false
+    var currentIngredientsArr:[String] = []
+    var currentIngredientsName:String = ""
+    var substituteIngredients:String = ""
     
     let user = Auth.auth().currentUser
     
@@ -40,7 +44,6 @@ class ViewMenuViewController: UIViewController {
         super.viewDidLoad()
         setupTableView()
         setupHeaderView()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -91,6 +94,17 @@ class ViewMenuViewController: UIViewController {
             self.currentMenu = Menu(forView: name, id: self.foodId!, ownerName: ownerName, imageUrl: imageUrlString, estimatedTime: estimatedTime, rating: rating, served: served, createdTime: createdTime, ingredients: ingredients, method: method, ownerId: ownerId)
             self.menuTableView.reloadData()
             self.headerView.foodImageView.kf.setImage(with: self.currentMenu?.imageUrl)
+            
+            if self.currentMenuTag {
+                for subIngredient in self.currentIngredientsArr {
+                    for (_,menuIngredient) in self.currentMenu.ingredients {
+                        if menuIngredient["name"]! == subIngredient {
+                            self.substituteIngredients = subIngredient
+                            break
+                        }
+                    }
+                }
+            }
             
             if !self.checkLoginStatatus() {
                 self.barButton.isHidden = true
@@ -255,6 +269,7 @@ extension ViewMenuViewController: UITableViewDataSource, UITableViewDelegate {
             
             let ingredients = currentMenu!.ingredients
             var ingredientsText = ""
+            var checker = false
             
             for index in 1...ingredients.count {
                 let name = ingredients["\(index)"]!["name"]!
@@ -275,7 +290,15 @@ extension ViewMenuViewController: UITableViewDataSource, UITableViewDelegate {
                     }
                 }
                 
+                if name == substituteIngredients {
+                    checker = true
+                }
                 ingredientsText += text
+            }
+            
+            if checker {
+                cell.substituteLabel.text = "*สามารถใช้\(currentIngredientsName)แทน\(substituteIngredients)ได้"
+                cell.substituteLabel.isHidden = false
             }
             
             cell.ingredientsLabel.text = ingredientsText

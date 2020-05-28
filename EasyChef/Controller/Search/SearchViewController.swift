@@ -29,8 +29,12 @@ class SearchViewController: UIViewController {
     var menuData:[Menu] = []
     
     var selectedMenu:String?
+    var selectedMenuTag:Bool = false
+    var selectedIngredients:[String] = []
     
     var searchedIngredients:String = ""
+    
+    var chosenName:String = ""
     
     lazy var refresher:UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -59,6 +63,12 @@ class SearchViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardNotification(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        selectedMenuTag = false
+        selectedIngredients = []
     }
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -122,6 +132,11 @@ class SearchViewController: UIViewController {
         if segue.identifier == "goToViewMenuScreen" {
             let destination = segue.destination as! ViewMenuViewController
             destination.foodId = selectedMenu
+            if selectedMenuTag {
+                destination.currentMenuTag = selectedMenuTag
+                destination.currentIngredientsArr = selectedIngredients
+                destination.currentIngredientsName = chosenName
+            }
         }
     }
 }
@@ -372,7 +387,7 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        var chosenName:String = ""
+        chosenName = ""
         
         iconImageView.isHidden = true
         statusLabel.isHidden = true
@@ -434,6 +449,10 @@ extension SearchViewController:UICollectionViewDataSource, UICollectionViewDeleg
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedMenu = menuData[indexPath.row].foodId
+        if menuData[indexPath.row].tag == "substitute" {
+            selectedMenuTag = true
+            selectedIngredients = ingredientsDict[chosenName]!
+        }
         segueWithoutSender(destination: "goToViewMenuScreen")
     }
     

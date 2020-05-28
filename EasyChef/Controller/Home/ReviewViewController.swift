@@ -64,7 +64,7 @@ class ReviewViewController: UIViewController {
             .document(uid)
             .setData([
                 "comment": commentText!,
-                "imageUrl": imageUrl!,
+                "imageUrl": imageUrl ?? "",
                 "name": name!,
                 "ownerId": uid,
                 "rating": rating,

@@ -73,6 +73,7 @@ class ProfileViewController: UIViewController {
                 self.about = (document.get("about") as! String)
                 self.style = (document.get("style") as! String)
                 self.showOwnedMenu()
+                self.profileTableView.reloadData()
             }
         }
         if let imageUrl = user?.photoURL {
@@ -207,7 +208,15 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             return cell
         } else if indexPath.row == 3 {
             let cell = tableView.dequeueReusableCell(withIdentifier: Storyboard.menuContent, for: indexPath) as! MenuContentTableViewCell
-            
+            print(menuData.count)
+            if menuData.count == 0 {
+                cell.logoImageView.isHidden = false
+                cell.statusLabel.isHidden = false
+            } else {
+                
+                cell.logoImageView.isHidden = true
+                cell.statusLabel.isHidden = true
+            }
             return cell
         }
         
@@ -231,10 +240,14 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 3 {
-            if menuData.count % 2 == 0 {
-                return CGFloat(210*(menuData.count/2))
+            if menuData.count == 0 {
+                return CGFloat(200)
             } else {
-                return CGFloat(210*((menuData.count+1)/2))
+                if menuData.count % 2 == 0 {
+                    return CGFloat(210*(menuData.count/2))
+                } else {
+                    return CGFloat(210*((menuData.count+1)/2))
+                }
             }
         } else {
             return UITableView.automaticDimension
@@ -285,7 +298,7 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
 extension ProfileViewController {
     func displaySettingActionSheet() {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Setting", style: .default, handler: nil))
+        //alert.addAction(UIAlertAction(title: "Setting", style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: "Log Out", style: .default, handler: { (action) in
             self.logOut()
         }))
